@@ -497,7 +497,21 @@ Get cached YouTube API results by query.
 ### In Progress 🚧
 
 - **Stage 9**: Results display UI
+  - Comprehensive results visualization component
+  - Feature analysis cards with confidence scores
+  - YouTube search tags display
+  - Smooth scroll-to-results functionality
+  - Loading skeleton states for better UX
 - **Stage 10**: Error handling and polish
+  - Enhanced error handling with specific error types
+  - User-friendly error messages with actionable guidance
+  - Request timeouts and network error handling
+  - Full accessibility support (WCAG 2.1 compliant)
+  - ARIA labels, roles, and semantic HTML
+  - Keyboard navigation support
+  - Focus indicators for better keyboard navigation
+  - Loading states and skeleton screens
+  - Reduced motion support for user preferences
 
 ### Future Enhancements 🔮
 
@@ -534,6 +548,27 @@ DATABASE_URL=postgresql://user:password@localhost:5432/facial_analysis
 MAX_UPLOAD_SIZE_MB=10
 ```
 
+## Accessibility Features
+
+Amuse is built with accessibility in mind to ensure all users can benefit from facial analysis:
+
+- **WCAG 2.1 Compliant**: Semantic HTML, ARIA labels, and proper heading hierarchy
+- **Keyboard Navigation**: Full keyboard support with visible focus indicators
+- **Screen Reader Support**: Descriptive labels and ARIA live regions for dynamic content
+- **Reduced Motion**: Respects user's `prefers-reduced-motion` preference
+- **Color Contrast**: High-contrast color palette for readability
+- **Error Handling**: Clear, actionable error messages with recovery guidance
+
+## Error Handling
+
+The app provides user-friendly error messages for common issues:
+
+- **No Face Detected**: Guidance on taking proper facial photos
+- **Multiple Faces**: Instruction to upload single-face images
+- **Network Errors**: Connection troubleshooting steps
+- **File Errors**: File size and format requirements
+- **Server Errors**: Retry options and status information
+
 ## Troubleshooting
 
 ### Backend not connecting
@@ -560,6 +595,13 @@ python init_db.py  # Reinitialize database
 1. Verify `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`
 2. Check Supabase project is active
 3. Ensure API keys have correct permissions
+
+### No face detected
+
+- Ensure photo clearly shows your face
+- Use front-facing camera or upload a passport-style photo
+- Make sure lighting is adequate
+- Remove sunglasses or other face coverings
 
 ## Team
 

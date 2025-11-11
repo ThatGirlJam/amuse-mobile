@@ -21,7 +21,7 @@ export default function ResultsDisplay({ result }) {
   const { eye_shape, nose_width, lip_fullness, summary } = data;
 
   return (
-    <div className={styles.resultsContainer}>
+    <div className={styles.resultsContainer} role="region" aria-label="Facial analysis results">
       {/* Header Section */}
       <div className={styles.resultsHeader}>
         <h2 className={styles.resultsTitle}>Your Facial Analysis</h2>
@@ -31,10 +31,10 @@ export default function ResultsDisplay({ result }) {
       </div>
 
       {/* Feature Analysis Grid */}
-      <div className={styles.featuresGrid}>
+      <div className={styles.featuresGrid} role="list" aria-label="Facial features analysis">
         {/* Eye Shape Card */}
-        <div className={styles.featureCard}>
-          <div className={styles.featureIcon}>👁️</div>
+        <div className={styles.featureCard} role="listitem" aria-label="Eye shape analysis">
+          <div className={styles.featureIcon} aria-hidden="true">👁️</div>
           <h3 className={styles.featureTitle}>Eye Shape</h3>
           <div className={styles.featureClassification}>
             {eye_shape?.classification}
@@ -46,7 +46,14 @@ export default function ResultsDisplay({ result }) {
                 {(eye_shape?.confidence * 100).toFixed(1)}%
               </span>
             </div>
-            <div className={styles.progressBar}>
+            <div
+              className={styles.progressBar}
+              role="progressbar"
+              aria-valuenow={eye_shape?.confidence * 100}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label="Eye shape classification confidence"
+            >
               <div
                 className={styles.progressFill}
                 style={{ width: `${eye_shape?.confidence * 100}%` }}
@@ -70,8 +77,8 @@ export default function ResultsDisplay({ result }) {
         </div>
 
         {/* Nose Width Card */}
-        <div className={styles.featureCard}>
-          <div className={styles.featureIcon}>👃</div>
+        <div className={styles.featureCard} role="listitem" aria-label="Nose width analysis">
+          <div className={styles.featureIcon} aria-hidden="true">👃</div>
           <h3 className={styles.featureTitle}>Nose Width</h3>
           <div className={styles.featureClassification}>
             {nose_width?.classification}
@@ -83,7 +90,14 @@ export default function ResultsDisplay({ result }) {
                 {(nose_width?.confidence * 100).toFixed(1)}%
               </span>
             </div>
-            <div className={styles.progressBar}>
+            <div
+              className={styles.progressBar}
+              role="progressbar"
+              aria-valuenow={nose_width?.confidence * 100}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label="Nose width classification confidence"
+            >
               <div
                 className={styles.progressFill}
                 style={{ width: `${nose_width?.confidence * 100}%` }}
@@ -104,8 +118,8 @@ export default function ResultsDisplay({ result }) {
         </div>
 
         {/* Lip Fullness Card */}
-        <div className={styles.featureCard}>
-          <div className={styles.featureIcon}>💋</div>
+        <div className={styles.featureCard} role="listitem" aria-label="Lip fullness analysis">
+          <div className={styles.featureIcon} aria-hidden="true">💋</div>
           <h3 className={styles.featureTitle}>Lip Fullness</h3>
           <div className={styles.featureClassification}>
             {lip_fullness?.classification}
@@ -117,7 +131,14 @@ export default function ResultsDisplay({ result }) {
                 {(lip_fullness?.confidence * 100).toFixed(1)}%
               </span>
             </div>
-            <div className={styles.progressBar}>
+            <div
+              className={styles.progressBar}
+              role="progressbar"
+              aria-valuenow={lip_fullness?.confidence * 100}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label="Lip fullness classification confidence"
+            >
               <div
                 className={styles.progressFill}
                 style={{ width: `${lip_fullness?.confidence * 100}%` }}

@@ -132,6 +132,16 @@ export default function ImageUpload({ onImageSelect }) {
     }
   };
 
+  /**
+   * Handle keyboard navigation for upload area
+   */
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleSelectClick();
+    }
+  };
+
   return (
     <div className={styles.container}>
       {/* Upload Area */}
@@ -141,6 +151,10 @@ export default function ImageUpload({ onImageSelect }) {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          role="button"
+          aria-label="Upload image area. Press Enter to select a file"
         >
           <div className={styles.uploadContent}>
             <div className={styles.uploadIcon}>📸</div>
@@ -155,15 +169,17 @@ export default function ImageUpload({ onImageSelect }) {
                 className={styles.primaryButton}
                 onClick={handleCameraClick}
                 type="button"
+                aria-label="Take photo using camera"
               >
-                Take Photo
+                📷 Take Photo
               </button>
               <button
                 className={styles.secondaryButton}
                 onClick={handleSelectClick}
                 type="button"
+                aria-label="Choose image file from device"
               >
-                Choose File
+                📁 Choose File
               </button>
             </div>
 
@@ -192,13 +208,14 @@ export default function ImageUpload({ onImageSelect }) {
         </div>
       ) : (
         /* Preview Area */
-        <div className={styles.previewArea}>
+        <div className={styles.previewArea} role="region" aria-label="Image preview">
           <div className={styles.previewHeader}>
             <h3>Selected Image</h3>
             <button
               className={styles.clearButton}
               onClick={handleClear}
               type="button"
+              aria-label="Clear selected image and choose a different one"
             >
               ✕
             </button>
@@ -206,7 +223,7 @@ export default function ImageUpload({ onImageSelect }) {
           <div className={styles.previewImageContainer}>
             <img
               src={preview}
-              alt="Preview"
+              alt="Selected facial image preview ready for analysis"
               className={styles.previewImage}
             />
           </div>
@@ -218,8 +235,8 @@ export default function ImageUpload({ onImageSelect }) {
 
       {/* Error Message */}
       {error && (
-        <div className={styles.error}>
-          <span className={styles.errorIcon}>⚠️</span>
+        <div className={styles.error} role="alert" aria-live="assertive">
+          <span className={styles.errorIcon} aria-hidden="true">⚠️</span>
           <span>{error}</span>
         </div>
       )}
