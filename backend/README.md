@@ -5,6 +5,7 @@ Python Flask API for analyzing facial features using Google's MediaPipe Face Lan
 ## Features
 
 **Completed:**
+
 - ✅ Face detection using MediaPipe Face Landmarker (Stage 1)
 - ✅ 478 facial landmark extraction (Stage 1)
 - ✅ Health check endpoint (Stage 1)
@@ -25,6 +26,7 @@ Python Flask API for analyzing facial features using Google's MediaPipe Face Lan
   - Lip balance assessment (balanced, upper/lower dominant)
 
 **In Progress:**
+
 - 🚧 Unified analysis summary (Stage 5)
 - 🚧 Database persistence (Stage 6)
 
@@ -101,6 +103,7 @@ The API will be available at: `http://localhost:5000`
 Check if the API is running.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -117,6 +120,7 @@ Check if the API is running.
 Upload an image and analyze facial features.
 
 **Request:**
+
 - Method: `POST`
 - Content-Type: `multipart/form-data`
 - Body: Form data with key `image` containing the image file
@@ -124,12 +128,14 @@ Upload an image and analyze facial features.
 **Supported formats:** PNG, JPG, JPEG, WEBP
 
 **Example using curl:**
+
 ```bash
 curl -X POST http://localhost:5000/api/analyze \
   -F "image=@path/to/your/image.jpg"
 ```
 
 **Success Response (200):**
+
 ```json
 {
   "success": true,
@@ -190,7 +196,8 @@ curl -X POST http://localhost:5000/api/analyze \
 
 **Error Responses:**
 
-*No face detected (400):*
+_No face detected (400):_
+
 ```json
 {
   "error": "No face detected in image",
@@ -200,7 +207,8 @@ curl -X POST http://localhost:5000/api/analyze \
 }
 ```
 
-*Multiple faces (400):*
+_Multiple faces (400):_
+
 ```json
 {
   "error": "Multiple faces detected",
@@ -210,7 +218,8 @@ curl -X POST http://localhost:5000/api/analyze \
 }
 ```
 
-*Invalid file type (400):*
+_Invalid file type (400):_
+
 ```json
 {
   "error": "Invalid file type",
@@ -235,7 +244,7 @@ backend/
 │   └── face_landmarker.task     # MediaPipe model (download separately)
 ├── requirements.txt             # Python dependencies
 ├── run.py                       # Development server entry point
-├── test_eye_classification.py   # Test script for eye analysis
+├── test_classification.py   # Test script for eye analysis
 ├── .env.example                # Example environment variables
 ├── .gitignore
 └── README.md
@@ -252,7 +261,7 @@ backend/
 python run.py
 
 # In a new terminal, run the test script
-python test_eye_classification.py path/to/test_image.jpg
+python test_classification.py path/to/test_image.jpg
 ```
 
 The test script will display formatted eye analysis results and save the full JSON response to `test_result.json`.
@@ -271,10 +280,12 @@ The test script will display formatted eye analysis results and save the full JS
 ### CORS Configuration
 
 The API is configured to accept requests from:
+
 - `http://localhost:3000` (Next.js default port)
 - `http://localhost:3001`
 
 To add more origins, edit `app/__init__.py`:
+
 ```python
 CORS(app, resources={
     r"/api/*": {
@@ -300,21 +311,27 @@ CORS(app, resources={
 ## Troubleshooting
 
 ### Model file not found
+
 ```
 Failed to initialize Face Landmarker: Failed to open model file
 ```
+
 **Solution:** Download the model file and place it in `backend/models/face_landmarker.task`
 
 ### Import errors
+
 ```
 ModuleNotFoundError: No module named 'mediapipe'
 ```
+
 **Solution:** Ensure virtual environment is activated and run `pip install -r requirements.txt`
 
 ### Port already in use
+
 ```
 OSError: [Errno 48] Address already in use
 ```
+
 **Solution:** Change the port in `.env` file or kill the process using port 5000
 
 ## License
