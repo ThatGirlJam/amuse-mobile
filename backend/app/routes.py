@@ -8,6 +8,7 @@ import os
 from datetime import datetime
 
 from app.utils.face_analyzer import FaceAnalyzer
+from app.services.analysis_service import AnalysisService
 
 # Create blueprint
 api_bp = Blueprint("api", __name__)
@@ -101,16 +102,129 @@ def analyze_face():
         if result.get("error"):
             return jsonify(result), 400
 
+        # Check if results should be saved to database
+        save_to_db = request.form.get('save', 'true').lower() == 'true'
+
+        saved_id = None
+        if save_to_db:
+            try:
+                saved_result = AnalysisService.save_analysis(result)
+                saved_id = saved_result.id
+            except Exception as e:
+                # Log error but don't fail the request
+                print(f"Warning: Failed to save to database: {str(e)}")
+
         return (
             jsonify(
                 {
                     "success": True,
                     "timestamp": datetime.utcnow().isoformat(),
+                    "saved_id": saved_id,
                     "data": result,
                 }
             ),
             200,
         )
+
+    except Exception as e:
+        return jsonify({"error": "Internal server error", "message": str(e)}), 500
+
+
+@api_bp.route("/results/<int:result_id>", methods=["GET"])
+def get_result(result_id):
+    """
+    Retrieve a specific analysis result by ID
+
+    Args:
+        result_id: Database ID of the analysis result
+
+    Returns:
+        JSON response with analysis result
+    """
+    try:
+        result = AnalysisService.get_analysis_by_id(result_id)
+
+        if not result:
+            return jsonify({
+                "error": "Not found",
+                "message": f"Analysis result with ID {result_id} not found"
+            }), 404
+
+        return jsonify({
+            "success": True,
+            "data": result.to_dict()
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "Internal server error", "message": str(e)}), 500
+
+
+@api_bp.route("/results", methods=["GET"])
+def get_results():
+    """
+    Get recent analysis results or search by features
+
+    Query parameters:
+        limit: Maximum number of results (default: 10)
+        eye_shape: Filter by eye shape
+        nose_width: Filter by nose width
+        lip_fullness: Filter by lip fullness
+
+    Returns:
+        JSON response with list of analysis results
+    """
+    try:
+        limit = int(request.args.get('limit', 10))
+        eye_shape = request.args.get('eye_shape')
+        nose_width = request.args.get('nose_width')
+        lip_fullness = request.args.get('lip_fullness')
+
+        # If any filters provided, use search
+        if eye_shape or nose_width or lip_fullness:
+            results = AnalysisService.get_analyses_by_features(
+                eye_shape=eye_shape,
+                nose_width=nose_width,
+                lip_fullness=lip_fullness,
+                limit=limit
+            )
+        else:
+            # Otherwise get recent results
+            results = AnalysisService.get_recent_analyses(limit=limit)
+
+        return jsonify({
+            "success": True,
+            "count": len(results),
+            "data": [result.to_dict() for result in results]
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": "Internal server error", "message": str(e)}), 500
+
+
+@api_bp.route("/results/<int:result_id>", methods=["DELETE"])
+def delete_result(result_id):
+    """
+    Delete a specific analysis result
+
+    Args:
+        result_id: Database ID of the analysis result
+
+    Returns:
+        JSON response confirming deletion
+    """
+    try:
+        success = AnalysisService.delete_analysis(result_id)
+
+        if not success:
+            return jsonify({
+                "error": "Not found",
+                "message": f"Analysis result with ID {result_id} not found"
+            }), 404
+
+        return jsonify({
+            "success": True,
+            "message": f"Analysis result {result_id} deleted successfully"
+        }), 200
 
     except Exception as e:
         return jsonify({"error": "Internal server error", "message": str(e)}), 500
