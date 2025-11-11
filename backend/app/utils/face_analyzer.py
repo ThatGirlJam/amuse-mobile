@@ -5,7 +5,7 @@ This module handles face detection and landmark extraction using Google's MediaP
 Stage 1: Basic landmark detection
 Stage 2: Eye shape classification
 Stage 3: Nose width classification
-Stage 4: Lip fullness classification (coming next)
+Stage 4: Lip fullness classification
 """
 
 import mediapipe as mp
@@ -17,6 +17,7 @@ from pathlib import Path
 
 from app.utils.eye_classifier import EyeClassifier
 from app.utils.nose_classifier import NoseClassifier
+from app.utils.lip_classifier import LipClassifier
 
 
 class FaceAnalyzer:
@@ -45,6 +46,7 @@ class FaceAnalyzer:
         # Initialize feature classifiers
         self.eye_classifier = EyeClassifier()
         self.nose_classifier = NoseClassifier()
+        self.lip_classifier = LipClassifier()
 
     def _initialize_landmarker(self):
         """
@@ -136,6 +138,9 @@ class FaceAnalyzer:
             # Classify nose width (Stage 3)
             nose_classification = self.nose_classifier.classify_nose(landmarks_list)
 
+            # Classify lip fullness (Stage 4)
+            lip_classification = self.lip_classifier.classify_lips(landmarks_list)
+
             return {
                 "face_detected": True,
                 "num_faces": 1,
@@ -143,7 +148,8 @@ class FaceAnalyzer:
                 "landmarks": landmarks_list,
                 "image_dimensions": {"width": image.shape[1], "height": image.shape[0]},
                 "eye_analysis": eye_classification,
-                "nose_analysis": nose_classification
+                "nose_analysis": nose_classification,
+                "lip_analysis": lip_classification
             }
 
         except Exception as e:
