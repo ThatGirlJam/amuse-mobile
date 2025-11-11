@@ -164,6 +164,12 @@
   justify-content: center;
 }
 
+/* Results Section */
+.resultsSection {
+  margin-bottom: 3rem;
+  scroll-margin-top: 2rem;
+}
+
 .errorMessage,
 .successMessage {
   background-color: white;
