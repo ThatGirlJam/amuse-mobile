@@ -30,10 +30,15 @@ Python Flask API for analyzing facial features using Google's MediaPipe Face Lan
   - Search tags for content scraping
   - Makeup-specific keywords by feature
   - Human-readable descriptions
+- ✅ Database persistence with PostgreSQL (Stage 6)
+  - Save analysis results automatically
+  - Retrieve past analyses by ID
+  - Search analyses by facial features
+  - Delete stored results
 
 **In Progress:**
 
-- 🚧 Database persistence (Stage 6)
+- 🚧 Next.js frontend integration (Stages 7-10)
 
 ## Prerequisites
 
@@ -64,7 +69,53 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Download MediaPipe Model
+### 3. Set Up PostgreSQL Database
+
+**Install PostgreSQL** (if not already installed):
+
+```bash
+# macOS (using Homebrew)
+brew install postgresql
+brew services start postgresql
+
+# Ubuntu/Debian
+sudo apt-get install postgresql postgresql-contrib
+sudo systemctl start postgresql
+
+# Windows: Download installer from postgresql.org
+```
+
+**Create database:**
+
+```bash
+# Create database for the application
+createdb facial_analysis
+
+# Or use psql:
+psql postgres
+CREATE DATABASE facial_analysis;
+\q
+```
+
+**Configure database connection:**
+
+```bash
+# Copy example environment file
+cp .env.example .env
+
+# Edit .env and update DATABASE_URL if needed:
+# DATABASE_URL=postgresql://user:password@localhost:5432/facial_analysis
+```
+
+### 4. Initialize Database Tables
+
+```bash
+python init_db.py
+```
+
+This will create all necessary database tables for storing analysis results.
+
+### 5. Download MediaPipe Model
 
 Download the Face Landmarker model file from MediaPipe:
 
@@ -72,26 +123,14 @@ Download the Face Landmarker model file from MediaPipe:
 # Create models directory
 mkdir -p models
 
-# Download the model (you'll need to do this manually or via curl/wget)
-# Visit: https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
-
-# Using curl:
+# Download the model using curl:
 curl -L -o models/face_landmarker.task \
   https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
 ```
 
 **Model file should be placed at:** `backend/models/face_landmarker.task`
 
-### 4. Configure Environment Variables
-
-```bash
-# Copy example environment file
-cp .env.example .env
-
-# Edit .env if needed (defaults should work for development)
-```
-
-### 5. Run the Server
+### 6. Run the Server
 
 ```bash
 python run.py
@@ -249,6 +288,14 @@ curl -X POST http://localhost:5000/api/analyze \
 - **makeup_keywords**: Categorized keywords for each facial feature
 - **feature_summary**: Clean structure for quick frontend consumption
 
+**Optional Parameters:**
+
+- `save` (form data): Whether to save results to database (default: "true"). Set to "false" to skip database save.
+
+**Success Response includes:**
+
+- `saved_id`: Database ID of saved result (null if not saved or save failed)
+
 **Error Responses:**
 
 _No face detected (400):_
@@ -282,6 +329,114 @@ _Invalid file type (400):_
 }
 ```
 
+### Get Analysis Result by ID
+
+**GET** `/api/results/<result_id>`
+
+Retrieve a specific saved analysis result.
+
+**Example:**
+
+```bash
+curl http://localhost:5000/api/results/1
+```
+
+**Success Response (200):**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "created_at": "2025-11-10T12:00:00",
+    "features": {
+      "eye_shape": "Almond",
+      "eye_secondary": ["Upturned"],
+      "nose_width": "medium",
+      "lip_fullness": "medium",
+      "lip_balance": "slightly_lower_dominant"
+    },
+    "confidence": {
+      "eye": 0.75,
+      "nose": 0.85,
+      "lip": 0.85,
+      "overall": 0.817
+    },
+    "description": "Your facial features include Almond upturned eyes...",
+    "search_tags": ["Almond eyes medium nose medium lips", ...],
+    "full_analysis": { ... }
+  }
+}
+```
+
+### Get Recent or Search Analysis Results
+
+**GET** `/api/results`
+
+Get recent analysis results or search by facial features.
+
+**Query Parameters:**
+
+- `limit` (optional): Maximum results to return (default: 10)
+- `eye_shape` (optional): Filter by eye shape (e.g., "Almond", "Round")
+- `nose_width` (optional): Filter by nose width (e.g., "narrow", "medium", "wide")
+- `lip_fullness` (optional): Filter by lip fullness (e.g., "thin", "medium", "full")
+
+**Examples:**
+
+```bash
+# Get 10 most recent results
+curl http://localhost:5000/api/results
+
+# Get results for Almond eyes
+curl http://localhost:5000/api/results?eye_shape=Almond
+
+# Get results with specific features
+curl "http://localhost:5000/api/results?eye_shape=Almond&nose_width=medium&limit=5"
+```
+
+**Success Response (200):**
+
+```json
+{
+  "success": true,
+  "count": 10,
+  "data": [
+    {
+      "id": 1,
+      "created_at": "2025-11-10T12:00:00",
+      "features": { ... },
+      "confidence": { ... },
+      "description": "...",
+      "search_tags": [...],
+      "full_analysis": { ... }
+    },
+    ...
+  ]
+}
+```
+
+### Delete Analysis Result
+
+**DELETE** `/api/results/<result_id>`
+
+Delete a specific analysis result from the database.
+
+**Example:**
+
+```bash
+curl -X DELETE http://localhost:5000/api/results/1
+```
+
+**Success Response (200):**
+
+```json
+{
+  "success": true,
+  "message": "Analysis result 1 deleted successfully"
+}
+```
+
 ## Project Structure
 
 ```
@@ -289,6 +444,10 @@ backend/
 ├── app/
 │   ├── __init__.py              # Flask app factory
 │   ├── routes.py                # API endpoints
+│   ├── models.py                # Database models (SQLAlchemy)
+│   ├── services/
+│   │   ├── __init__.py
+│   │   └── analysis_service.py  # Database operations
 │   └── utils/
 │       ├── __init__.py
 │       ├── face_analyzer.py     # MediaPipe integration & main analyzer
@@ -300,7 +459,8 @@ backend/
 │   └── face_landmarker.task     # MediaPipe model (download separately)
 ├── requirements.txt             # Python dependencies
 ├── run.py                       # Development server entry point
-├── test_classification.py   # Test script for eye analysis
+├── init_db.py                   # Database initialization script
+├── test_classification.py       # Test script for facial analysis
 ├── .env.example                # Example environment variables
 ├── .gitignore
 └── README.md
@@ -353,12 +513,17 @@ CORS(app, resources={
 
 ## Implementation Progress
 
+**Backend (Complete):**
+
 - ✅ **Stage 1**: Python backend with MediaPipe Face Landmarker
 - ✅ **Stage 2**: Eye shape classification (Almond, Round, Monolid, Hooded, Upturned, Downturned)
 - ✅ **Stage 3**: Nose width classification (Narrow, Medium, Wide)
 - ✅ **Stage 4**: Lip fullness classification (Thin, Medium, Full)
 - ✅ **Stage 5**: Unified analysis summary with YouTube search tags
-- 🚧 **Stage 6**: Database integration for storing results
+- ✅ **Stage 6**: PostgreSQL database integration for storing results
+
+**Frontend (To Do):**
+
 - 🚧 **Stage 7**: Next.js image upload component
 - 🚧 **Stage 8**: Next.js API integration layer
 - 🚧 **Stage 9**: Results display UI
@@ -389,6 +554,42 @@ OSError: [Errno 48] Address already in use
 ```
 
 **Solution:** Change the port in `.env` file or kill the process using port 5000
+
+### Database connection errors
+
+```
+sqlalchemy.exc.OperationalError: could not connect to server
+```
+
+**Solution:**
+
+1. Ensure PostgreSQL is running:
+
+```bash
+# macOS
+brew services list
+brew services start postgresql
+
+# Ubuntu/Linux
+sudo systemctl status postgresql
+sudo systemctl start postgresql
+```
+
+2. Verify database exists:
+
+```bash
+psql -l | grep facial_analysis
+```
+
+3. Check DATABASE_URL in `.env` is correct
+
+### Database not saving results
+
+If the API works but results aren't being saved:
+
+1. Run database initialization: `python init_db.py`
+2. Check PostgreSQL logs for errors
+3. Verify database permissions for your user
 
 ## License
 
