@@ -14,10 +14,14 @@ Python Flask API for analyzing facial features using Google's MediaPipe Face Lan
   - Almond, Round, Monolid, Hooded, Upturned, Downturned
   - Geometric analysis: aspect ratio, eyelid coverage, corner angles
   - Confidence scores for each classification
+- ✅ Nose width classification with 3 categories (Stage 3)
+  - Narrow, Medium, Wide
+  - Nose-to-face width ratio calculation
+  - Nostril and bridge width measurements
 
 **In Progress:**
-- 🚧 Nose width classification (Stage 3)
 - 🚧 Lip fullness classification (Stage 4)
+- 🚧 Unified analysis with all features (Stage 5)
 - 🚧 Database persistence (Stage 6)
 
 ## Prerequisites
@@ -150,6 +154,17 @@ curl -X POST http://localhost:5000/api/analyze \
         "eyelid_coverage": 0.38,
         "corner_angle": 4.2
       }
+    },
+    "nose_analysis": {
+      "nose_width": "medium",
+      "confidence": 0.85,
+      "measurements": {
+        "nose_width": 0.12,
+        "face_width": 0.38,
+        "nose_to_face_ratio": 0.316,
+        "nostril_width": 0.08,
+        "bridge_width": 0.05
+      }
     }
   }
 }
@@ -195,7 +210,8 @@ backend/
 │   └── utils/
 │       ├── __init__.py
 │       ├── face_analyzer.py     # MediaPipe integration & main analyzer
-│       └── eye_classifier.py    # Eye shape classification logic
+│       ├── eye_classifier.py    # Eye shape classification logic
+│       └── nose_classifier.py   # Nose width classification logic
 ├── models/
 │   └── face_landmarker.task     # MediaPipe model (download separately)
 ├── requirements.txt             # Python dependencies
@@ -253,7 +269,7 @@ CORS(app, resources={
 
 - ✅ **Stage 1**: Python backend with MediaPipe Face Landmarker
 - ✅ **Stage 2**: Eye shape classification (Almond, Round, Monolid, Hooded, Upturned, Downturned)
-- 🚧 **Stage 3**: Nose width classification (Narrow, Medium, Wide)
+- ✅ **Stage 3**: Nose width classification (Narrow, Medium, Wide)
 - 🚧 **Stage 4**: Lip fullness classification (Thin, Medium, Full)
 - 🚧 **Stage 5**: Unified analysis endpoint with all features
 - 🚧 **Stage 6**: Database integration for storing results
