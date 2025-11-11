@@ -2,14 +2,22 @@
 
 Python Flask API for analyzing facial features using Google's MediaPipe Face Landmarker. This service detects faces, extracts 478 facial landmarks, and classifies features like eye shape, nose width, and lip fullness to provide makeup recommendations.
 
-## Features (Stage 1)
+## Features
 
-- ✅ Face detection using MediaPipe Face Landmarker
-- ✅ 478 facial landmark extraction
-- ✅ Health check endpoint
-- ✅ Image upload and analysis endpoint
-- ✅ Error handling for no face / multiple faces
-- 🚧 Feature classification (Stages 2-4)
+**Completed:**
+- ✅ Face detection using MediaPipe Face Landmarker (Stage 1)
+- ✅ 478 facial landmark extraction (Stage 1)
+- ✅ Health check endpoint (Stage 1)
+- ✅ Image upload and analysis endpoint (Stage 1)
+- ✅ Error handling for no face / multiple faces (Stage 1)
+- ✅ Eye shape classification with 6 categories (Stage 2)
+  - Almond, Round, Monolid, Hooded, Upturned, Downturned
+  - Geometric analysis: aspect ratio, eyelid coverage, corner angles
+  - Confidence scores for each classification
+
+**In Progress:**
+- 🚧 Nose width classification (Stage 3)
+- 🚧 Lip fullness classification (Stage 4)
 - 🚧 Database persistence (Stage 6)
 
 ## Prerequisites
@@ -129,6 +137,19 @@ curl -X POST http://localhost:5000/api/analyze \
     "image_dimensions": {
       "width": 1920,
       "height": 1080
+    },
+    "eye_analysis": {
+      "eye_shape": "Almond",
+      "secondary_features": ["Upturned"],
+      "confidence_scores": {
+        "Almond": 0.75,
+        "Upturned": 0.45
+      },
+      "metrics": {
+        "aspect_ratio": 0.42,
+        "eyelid_coverage": 0.38,
+        "corner_angle": 4.2
+      }
     }
   }
 }
@@ -169,16 +190,18 @@ curl -X POST http://localhost:5000/api/analyze \
 ```
 backend/
 ├── app/
-│   ├── __init__.py          # Flask app factory
-│   ├── routes.py            # API endpoints
+│   ├── __init__.py              # Flask app factory
+│   ├── routes.py                # API endpoints
 │   └── utils/
 │       ├── __init__.py
-│       └── face_analyzer.py # MediaPipe integration
+│       ├── face_analyzer.py     # MediaPipe integration & main analyzer
+│       └── eye_classifier.py    # Eye shape classification logic
 ├── models/
-│   └── face_landmarker.task # MediaPipe model (download separately)
-├── requirements.txt         # Python dependencies
-├── run.py                   # Development server entry point
-├── .env.example            # Example environment variables
+│   └── face_landmarker.task     # MediaPipe model (download separately)
+├── requirements.txt             # Python dependencies
+├── run.py                       # Development server entry point
+├── test_eye_classification.py   # Test script for eye analysis
+├── .env.example                # Example environment variables
 ├── .gitignore
 └── README.md
 ```
@@ -186,6 +209,20 @@ backend/
 ## Development
 
 ### Testing the API
+
+**Option 1: Using the test script (recommended)**
+
+```bash
+# Start the server
+python run.py
+
+# In a new terminal, run the test script
+python test_eye_classification.py path/to/test_image.jpg
+```
+
+The test script will display formatted eye analysis results and save the full JSON response to `test_result.json`.
+
+**Option 2: Using curl**
 
 1. Start the server: `python run.py`
 2. Check health: `curl http://localhost:5000/api/health`
@@ -214,11 +251,13 @@ CORS(app, resources={
 
 ## Next Stages
 
-- **Stage 2**: Eye shape classification (Almond, Round, Monolid, Hooded, Upturned, Downturned)
-- **Stage 3**: Nose width classification (Narrow, Medium, Wide)
-- **Stage 4**: Lip fullness classification (Thin, Medium, Full)
-- **Stage 5**: Unified analysis endpoint with all features
-- **Stage 6**: Database integration for storing results
+- ✅ **Stage 1**: Python backend with MediaPipe Face Landmarker
+- ✅ **Stage 2**: Eye shape classification (Almond, Round, Monolid, Hooded, Upturned, Downturned)
+- 🚧 **Stage 3**: Nose width classification (Narrow, Medium, Wide)
+- 🚧 **Stage 4**: Lip fullness classification (Thin, Medium, Full)
+- 🚧 **Stage 5**: Unified analysis endpoint with all features
+- 🚧 **Stage 6**: Database integration for storing results
+- 🚧 **Stage 7-10**: Frontend integration with Next.js
 
 ## Troubleshooting
 
