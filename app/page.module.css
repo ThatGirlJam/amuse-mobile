@@ -157,6 +157,123 @@
   margin: 0;
 }
 
+/* Message Section */
+.messageSection {
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.errorMessage,
+.successMessage {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 1.5rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.errorMessage {
+  border-left: 4px solid #f56565;
+}
+
+.successMessage {
+  border-left: 4px solid #48bb78;
+}
+
+.errorIcon,
+.successIcon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.errorMessage h3 {
+  color: #c53030;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.successMessage h3 {
+  color: #2f855a;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.errorMessage p,
+.successMessage p {
+  color: #718096;
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+.resultPreview {
+  background-color: #f7fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #4a5568 !important;
+  font-style: italic;
+  margin-top: 1rem !important;
+}
+
+.messageActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.retryButton,
+.viewResultsButton,
+.newAnalysisButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.retryButton {
+  background-color: #667eea;
+  color: white;
+}
+
+.retryButton:hover:not(:disabled) {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+}
+
+.retryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.viewResultsButton {
+  background-color: #667eea;
+  color: white;
+  flex: 1;
+}
+
+.viewResultsButton:hover {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+}
+
+.newAnalysisButton {
+  background-color: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  flex: 1;
+}
+
+.newAnalysisButton:hover {
+  background-color: #f7fafc;
+  transform: translateY(-1px);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .main {
@@ -186,6 +303,22 @@
 
   .infoGrid {
     grid-template-columns: 1fr;
+  }
+
+  .errorMessage,
+  .successMessage {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .messageActions {
+    flex-direction: column;
+  }
+
+  .viewResultsButton,
+  .newAnalysisButton {
+    width: 100%;
   }
 }
 

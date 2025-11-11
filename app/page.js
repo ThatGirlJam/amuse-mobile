@@ -2,34 +2,50 @@
 
 import { useState } from 'react';
 import ImageUpload from './components/ImageUpload';
+import { analyzeFace } from '../lib/api';
 import styles from './page.module.css';
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [error, setError] = useState(null);
 
   /**
    * Handle image selection from upload component
    */
   const handleImageSelect = (file) => {
     setSelectedImage(file);
+    // Clear previous results and errors when new image is selected
+    setAnalysisResult(null);
+    setError(null);
   };
 
   /**
    * Handle analyze button click
-   * This will be connected to the API in Stage 8
+   * Sends image to Python backend for facial analysis
    */
   const handleAnalyze = async () => {
     if (!selectedImage) return;
 
     setIsAnalyzing(true);
+    setError(null);
 
-    // TODO: Stage 8 - Connect to Python backend API
-    // For now, just simulate analysis
-    setTimeout(() => {
+    try {
+      // Call Python backend API
+      const result = await analyzeFace(selectedImage, true);
+
+      // Store results for display in Stage 9
+      setAnalysisResult(result);
+
+      console.log('Analysis successful:', result);
+    } catch (err) {
+      // Handle errors
+      setError(err.message || 'Failed to analyze image. Please try again.');
+      console.error('Analysis error:', err);
+    } finally {
       setIsAnalyzing(false);
-      alert('Analysis will be implemented in Stage 8!');
-    }, 2000);
+    }
   };
 
   return (
@@ -52,7 +68,7 @@ export default function Home() {
         </section>
 
         {/* Analyze Button */}
-        {selectedImage && (
+        {selectedImage && !analysisResult && (
           <section className={styles.actionSection}>
             <button
               className={styles.analyzeButton}
@@ -68,6 +84,63 @@ export default function Home() {
                 'Analyze My Features'
               )}
             </button>
+          </section>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <section className={styles.messageSection}>
+            <div className={styles.errorMessage}>
+              <span className={styles.errorIcon}>⚠️</span>
+              <div>
+                <h3>Analysis Failed</h3>
+                <p>{error}</p>
+                <button
+                  className={styles.retryButton}
+                  onClick={handleAnalyze}
+                  disabled={isAnalyzing}
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Success Message */}
+        {analysisResult && !error && (
+          <section className={styles.messageSection}>
+            <div className={styles.successMessage}>
+              <span className={styles.successIcon}>✅</span>
+              <div>
+                <h3>Analysis Complete!</h3>
+                <p>Your facial features have been analyzed successfully.</p>
+                <p className={styles.resultPreview}>
+                  {analysisResult.data?.summary?.description}
+                </p>
+                <div className={styles.messageActions}>
+                  <button
+                    className={styles.viewResultsButton}
+                    onClick={() => {
+                      // Stage 9: This will scroll to results display
+                      console.log('View results:', analysisResult);
+                    }}
+                  >
+                    View Results
+                  </button>
+                  <button
+                    className={styles.newAnalysisButton}
+                    onClick={() => {
+                      setSelectedImage(null);
+                      setAnalysisResult(null);
+                      setError(null);
+                    }}
+                  >
+                    New Analysis
+                  </button>
+                </div>
+              </div>
+            </div>
           </section>
         )}
 
