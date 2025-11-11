@@ -24,6 +24,63 @@ export default function Home() {
   };
 
   /**
+   * Get user-friendly error message based on error type
+   */
+  const getErrorDetails = (err) => {
+    const errorType = err.type || 'UNKNOWN_ERROR';
+
+    const errorMap = {
+      NO_FACE_DETECTED: {
+        title: 'No Face Detected',
+        message: 'We couldn\'t detect a face in your image. Please ensure your photo clearly shows your face, similar to a passport photo.',
+        icon: '🤷'
+      },
+      MULTIPLE_FACES: {
+        title: 'Multiple Faces Detected',
+        message: 'We detected multiple faces in your image. Please upload a photo with only your face visible.',
+        icon: '👥'
+      },
+      INVALID_IMAGE: {
+        title: 'Invalid Image',
+        message: 'The image you uploaded appears to be invalid or corrupted. Please try a different image.',
+        icon: '🖼️'
+      },
+      FILE_TOO_LARGE: {
+        title: 'File Too Large',
+        message: 'Your image file is too large. Please upload an image smaller than 10MB.',
+        icon: '📦'
+      },
+      UNSUPPORTED_FORMAT: {
+        title: 'Unsupported Format',
+        message: 'This file format is not supported. Please upload a JPEG, PNG, or WebP image.',
+        icon: '❌'
+      },
+      NETWORK_ERROR: {
+        title: 'Connection Error',
+        message: 'Unable to connect to the server. Please check that the backend is running and try again.',
+        icon: '🔌'
+      },
+      TIMEOUT_ERROR: {
+        title: 'Request Timeout',
+        message: 'The request took too long to complete. Please try again with a smaller image.',
+        icon: '⏱️'
+      },
+      SERVER_ERROR: {
+        title: 'Server Error',
+        message: 'The server encountered an error while processing your request. Please try again later.',
+        icon: '🚨'
+      },
+      UNKNOWN_ERROR: {
+        title: 'Analysis Failed',
+        message: err.message || 'An unexpected error occurred. Please try again.',
+        icon: '⚠️'
+      }
+    };
+
+    return errorMap[errorType] || errorMap.UNKNOWN_ERROR;
+  };
+
+  /**
    * Handle analyze button click
    * Sends image to Python backend for facial analysis
    */
@@ -42,8 +99,9 @@ export default function Home() {
 
       console.log('Analysis successful:', result);
     } catch (err) {
-      // Handle errors
-      setError(err.message || 'Failed to analyze image. Please try again.');
+      // Handle errors with detailed messages
+      const errorDetails = getErrorDetails(err);
+      setError(errorDetails);
       console.error('Analysis error:', err);
     } finally {
       setIsAnalyzing(false);
@@ -86,10 +144,12 @@ export default function Home() {
               className={styles.analyzeButton}
               onClick={handleAnalyze}
               disabled={isAnalyzing}
+              aria-label="Analyze facial features"
+              aria-busy={isAnalyzing}
             >
               {isAnalyzing ? (
                 <>
-                  <span className={styles.spinner}></span>
+                  <span className={styles.spinner} aria-hidden="true"></span>
                   Analyzing...
                 </>
               ) : (
@@ -99,20 +159,43 @@ export default function Home() {
           </section>
         )}
 
+        {/* Loading Skeleton */}
+        {isAnalyzing && (
+          <section className={styles.loadingSection} aria-label="Analysis in progress">
+            <div className={styles.loadingSkeleton}>
+              <div className={styles.skeletonHeader}>
+                <div className={styles.skeletonTitle}></div>
+                <div className={styles.skeletonText}></div>
+              </div>
+              <div className={styles.skeletonCards}>
+                <div className={styles.skeletonCard}></div>
+                <div className={styles.skeletonCard}></div>
+                <div className={styles.skeletonCard}></div>
+              </div>
+              <div className={styles.loadingMessage}>
+                <span className={styles.loadingIcon}>🔍</span>
+                <p>Analyzing your facial features...</p>
+                <span className={styles.loadingSubtext}>This may take a few seconds</span>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Error Message */}
         {error && (
-          <section className={styles.messageSection}>
+          <section className={styles.messageSection} role="alert" aria-live="assertive">
             <div className={styles.errorMessage}>
-              <span className={styles.errorIcon}>⚠️</span>
+              <span className={styles.errorIcon} aria-hidden="true">{error.icon}</span>
               <div>
-                <h3>Analysis Failed</h3>
-                <p>{error}</p>
+                <h3>{error.title}</h3>
+                <p>{error.message}</p>
                 <button
                   className={styles.retryButton}
                   onClick={handleAnalyze}
                   disabled={isAnalyzing}
+                  aria-label="Retry facial analysis"
                 >
-                  Try Again
+                  {isAnalyzing ? 'Retrying...' : 'Try Again'}
                 </button>
               </div>
             </div>
@@ -121,9 +204,9 @@ export default function Home() {
 
         {/* Success Message */}
         {analysisResult && !error && (
-          <section className={styles.messageSection}>
+          <section className={styles.messageSection} role="status" aria-live="polite">
             <div className={styles.successMessage}>
-              <span className={styles.successIcon}>✅</span>
+              <span className={styles.successIcon} aria-hidden="true">✅</span>
               <div>
                 <h3>Analysis Complete!</h3>
                 <p>Your facial features have been analyzed successfully.</p>
@@ -134,6 +217,7 @@ export default function Home() {
                   <button
                     className={styles.viewResultsButton}
                     onClick={scrollToResults}
+                    aria-label="View detailed analysis results"
                   >
                     View Results
                   </button>
@@ -144,6 +228,7 @@ export default function Home() {
                       setAnalysisResult(null);
                       setError(null);
                     }}
+                    aria-label="Start a new facial analysis"
                   >
                     New Analysis
                   </button>
