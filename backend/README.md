@@ -25,9 +25,14 @@ Python Flask API for analyzing facial features using Google's MediaPipe Face Lan
   - Upper and lower lip measurements
   - Lip balance assessment (balanced, upper/lower dominant)
 
+- ✅ Unified analysis summary with YouTube search tags (Stage 5)
+  - Consolidated feature summary
+  - Search tags for content scraping
+  - Makeup-specific keywords by feature
+  - Human-readable descriptions
+
 **In Progress:**
 
-- 🚧 Unified analysis summary (Stage 5)
 - 🚧 Database persistence (Stage 6)
 
 ## Prerequisites
@@ -189,10 +194,60 @@ curl -X POST http://localhost:5000/api/analyze \
         "upper_lip_ratio": 0.120,
         "lower_lip_ratio": 0.147
       }
+    },
+    "summary": {
+      "features": {
+        "eye_shape": "Almond",
+        "eye_secondary": ["Upturned"],
+        "nose_width": "medium",
+        "lip_fullness": "medium",
+        "lip_balance": "slightly_lower_dominant"
+      },
+      "overall_confidence": 0.817,
+      "description": "Your facial features include Almond upturned eyes, a medium nose, and medium lips with a slightly lower dominant lip balance.",
+      "search_tags": [
+        "Almond eyes medium nose medium lips",
+        "Almond eye makeup",
+        "medium nose makeup",
+        "medium lips makeup",
+        "Upturned eyes makeup",
+        "Almond Upturned eyes",
+        "makeup for medium nose",
+        "makeup for medium lips",
+        "winged eyeliner",
+        "natural contour"
+      ],
+      "makeup_keywords": {
+        "eye": ["Almond", "eye makeup", "eyeshadow", "winged eyeliner", "cat eye"],
+        "nose": ["medium", "nose contour", "nose makeup", "natural contour"],
+        "lip": ["medium", "lip makeup", "lipstick", "natural lip", "balance upper lip"]
+      },
+      "feature_summary": {
+        "eyes": {
+          "primary": "Almond",
+          "secondary": ["Upturned"]
+        },
+        "nose": {
+          "width": "medium"
+        },
+        "lips": {
+          "fullness": "medium",
+          "balance": "slightly_lower_dominant"
+        }
+      }
     }
   }
 }
 ```
+
+**Note**: The `summary` field provides a unified view of all features, including:
+
+- **features**: All classified features in one place
+- **overall_confidence**: Average confidence across all classifications
+- **description**: Human-readable description of facial features
+- **search_tags**: Ready-to-use search queries for YouTube/content scraping
+- **makeup_keywords**: Categorized keywords for each facial feature
+- **feature_summary**: Clean structure for quick frontend consumption
 
 **Error Responses:**
 
@@ -239,7 +294,8 @@ backend/
 │       ├── face_analyzer.py     # MediaPipe integration & main analyzer
 │       ├── eye_classifier.py    # Eye shape classification logic
 │       ├── nose_classifier.py   # Nose width classification logic
-│       └── lip_classifier.py    # Lip fullness classification logic
+│       ├── lip_classifier.py    # Lip fullness classification logic
+│       └── summary_formatter.py # Unified summary and search tags
 ├── models/
 │   └── face_landmarker.task     # MediaPipe model (download separately)
 ├── requirements.txt             # Python dependencies
@@ -301,7 +357,7 @@ CORS(app, resources={
 - ✅ **Stage 2**: Eye shape classification (Almond, Round, Monolid, Hooded, Upturned, Downturned)
 - ✅ **Stage 3**: Nose width classification (Narrow, Medium, Wide)
 - ✅ **Stage 4**: Lip fullness classification (Thin, Medium, Full)
-- 🚧 **Stage 5**: Unified analysis summary endpoint
+- ✅ **Stage 5**: Unified analysis summary with YouTube search tags
 - 🚧 **Stage 6**: Database integration for storing results
 - 🚧 **Stage 7**: Next.js image upload component
 - 🚧 **Stage 8**: Next.js API integration layer

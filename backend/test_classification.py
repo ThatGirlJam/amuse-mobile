@@ -113,6 +113,37 @@ def test_facial_features(image_path):
 
                 print("\n" + "=" * 60)
 
+            # Display unified summary
+            if 'summary' in result.get('data', {}):
+                summary = result['data']['summary']
+
+                print("\n" + "=" * 60)
+                print("UNIFIED SUMMARY")
+                print("=" * 60)
+
+                print(f"\nDescription: {summary['description']}")
+                print(f"Overall Confidence: {summary['overall_confidence']:.2%}")
+
+                print("\n--- Feature Summary ---")
+                fs = summary['feature_summary']
+                print(f"Eyes: {fs['eyes']['primary']}", end='')
+                if fs['eyes']['secondary']:
+                    print(f" ({', '.join(fs['eyes']['secondary'])})")
+                else:
+                    print()
+                print(f"Nose: {fs['nose']['width']}")
+                print(f"Lips: {fs['lips']['fullness']} ({fs['lips']['balance']})")
+
+                print("\n--- YouTube Search Tags (Top 5) ---")
+                for i, tag in enumerate(summary['search_tags'][:5], 1):
+                    print(f"{i}. {tag}")
+
+                print("\n--- Makeup Keywords ---")
+                for category, keywords in summary['makeup_keywords'].items():
+                    print(f"{category.capitalize()}: {', '.join(keywords[:5])}")
+
+                print("\n" + "=" * 60)
+
             # Save full response for debugging
             with open("test_result.json", "w") as f:
                 json.dump(result, f, indent=2)

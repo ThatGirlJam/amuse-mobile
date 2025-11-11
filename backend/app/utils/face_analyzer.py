@@ -18,6 +18,7 @@ from pathlib import Path
 from app.utils.eye_classifier import EyeClassifier
 from app.utils.nose_classifier import NoseClassifier
 from app.utils.lip_classifier import LipClassifier
+from app.utils.summary_formatter import SummaryFormatter
 
 
 class FaceAnalyzer:
@@ -47,6 +48,9 @@ class FaceAnalyzer:
         self.eye_classifier = EyeClassifier()
         self.nose_classifier = NoseClassifier()
         self.lip_classifier = LipClassifier()
+
+        # Initialize summary formatter
+        self.summary_formatter = SummaryFormatter()
 
     def _initialize_landmarker(self):
         """
@@ -141,6 +145,13 @@ class FaceAnalyzer:
             # Classify lip fullness (Stage 4)
             lip_classification = self.lip_classifier.classify_lips(landmarks_list)
 
+            # Create unified summary (Stage 5)
+            summary = self.summary_formatter.create_summary(
+                eye_classification,
+                nose_classification,
+                lip_classification
+            )
+
             return {
                 "face_detected": True,
                 "num_faces": 1,
@@ -149,7 +160,8 @@ class FaceAnalyzer:
                 "image_dimensions": {"width": image.shape[1], "height": image.shape[0]},
                 "eye_analysis": eye_classification,
                 "nose_analysis": nose_classification,
-                "lip_analysis": lip_classification
+                "lip_analysis": lip_classification,
+                "summary": summary
             }
 
         except Exception as e:
