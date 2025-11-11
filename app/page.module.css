@@ -1,120 +1,209 @@
 .main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  padding: 2rem;
-  text-align: center;
-  background-color: #ffffff;
-  color: var(--color-text-dark);
-  width: 100%;
-  max-width: 480px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 1200px;
   margin: 0 auto;
 }
 
+/* Header */
 .header {
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  opacity: 0.95;
+}
+
+.description {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.85;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Upload Section */
+.uploadSection {
+  background-color: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* Action Section */
+.actionSection {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 480px;
+  margin-bottom: 3rem;
 }
 
-.header .logo {
-  margin: 0 0 1rem 0;
-  width: 55%;
-  max-width: 300px;
-  height: auto;
-  object-fit: contain;
+.analyzeButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+.analyzeButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.analyzeButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Spinner Animation */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Info Section */
+.infoSection {
+  margin-bottom: 3rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.infoCard {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.infoIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.infoCard h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.infoCard p {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: white;
+  opacity: 0.8;
+  font-size: 0.875rem;
+  padding: 2rem 0;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .header .logo {
-    max-width: 250px;
+  .main {
+    padding: 1.5rem 1rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+  }
+
+  .description {
+    font-size: 0.875rem;
+  }
+
+  .uploadSection {
+    padding: 1.5rem;
+  }
+
+  .analyzeButton {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .header .logo {
-    max-width: 200px;
+  .title {
+    font-size: 2rem;
   }
-  
-  .main {
+
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .uploadSection {
     padding: 1rem;
   }
-}
 
-.buttonContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-  max-width: 200px;
-  margin: 2rem 0;
-}
-
-.loginButton,
-.signUpButton {
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  text-decoration: none;
-  display: block;
-  text-align: center;
-}
-
-.loginButton {
-  background-color: var(--color-secondary-bg-dark);
-  color: var(--color-text-dark);
-}
-
-/* .loginButton:hover {
-  background-color: #7a1a1b;
-  transform: translateY(-1px);
-} */
-
-.loginButton:active {
-  transform: translateY(0);
-}
-
-.signUpButton {
-  background-color: var(--color-secondary-bg-light);
-  color: var(--color-text-light);
-}
-/* 
-.signUpButton:hover {
-  background-color: var(--color-logo-main);
-  color: #ffffff;
-  transform: translateY(-1px);
-} */
-
-.signUpButton:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 480px) {
-  .buttonContainer {
-    max-width: 180px;
-    margin: 1.5rem 0;
+  .infoCard {
+    padding: 1.5rem;
   }
-  
-  .loginButton,
-  .signUpButton {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-  }
-}
-
-.header p {
-  margin: 0.5rem 0;
-  font-size: 1.2rem;
 }
 
