@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ImageUpload from './components/ImageUpload';
+import ResultsDisplay from './components/ResultsDisplay';
 import { analyzeFace } from '../lib/api';
 import styles from './page.module.css';
 
@@ -10,6 +11,7 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
+  const resultsRef = useRef(null);
 
   /**
    * Handle image selection from upload component
@@ -35,7 +37,7 @@ export default function Home() {
       // Call Python backend API
       const result = await analyzeFace(selectedImage, true);
 
-      // Store results for display in Stage 9
+      // Store results for display
       setAnalysisResult(result);
 
       console.log('Analysis successful:', result);
@@ -46,6 +48,16 @@ export default function Home() {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  /**
+   * Scroll to results section
+   */
+  const scrollToResults = () => {
+    resultsRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   };
 
   return (
@@ -121,10 +133,7 @@ export default function Home() {
                 <div className={styles.messageActions}>
                   <button
                     className={styles.viewResultsButton}
-                    onClick={() => {
-                      // Stage 9: This will scroll to results display
-                      console.log('View results:', analysisResult);
-                    }}
+                    onClick={scrollToResults}
                   >
                     View Results
                   </button>
@@ -141,6 +150,13 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </section>
+        )}
+
+        {/* Results Display */}
+        {analysisResult && !error && (
+          <section ref={resultsRef} className={styles.resultsSection}>
+            <ResultsDisplay result={analysisResult} />
           </section>
         )}
 
