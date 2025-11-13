@@ -1,0 +1,93 @@
+==============================
+🎨 User 1 features: {'eye_shape': 'almond', 'nose': 'medium', 'lips': 'full'}
+==============================
+  🔍 Searching: makeup tutorial eyes almond
+  🔍 Searching: makeup tutorial nose medium
+  🔍 Searching: makeup tutorial lips full
+  🔍 Searching: makeup tutorial eyes almond nose medium
+  🔍 Searching: makeup tutorial eyes almond lips full
+  🔍 Searching: makeup tutorial nose medium lips full
+  🔍 Searching: makeup tutorial eyes almond nose medium lips full
+
+Top Matching Makeup Tutorials:
+- HOW TO DO MAKEUP FOR ALMOND EYE SHAPE + how to get to know your face (https://youtube.com/watch?v=zopyg5VYZww) | Score: 0 | Features matched: 
+- HOW TO: Almond Eye Shape Guide | Lashes | Makeup | Beauty (https://youtube.com/watch?v=uEd0gWy8e9Y) | Score: 0 | Features matched: 
+- Transforming my Almond Eyes to Doe Eyes #doeeyes #makeupshorts #makeuptutorial (https://youtube.com/watch?v=69IAsS7RmkU) | Score: 0 | Features matched: 
+- Everyone loves this quick eye makeup (https://youtube.com/watch?v=rrgh0C2XAo4) | Score: 0 | Features matched: 
+- Simple &amp; Elegant Douyin Eye Makeup #douyin #makeuptutorial #youtubeshorts (https://youtube.com/watch?v=3TzyGYMPIjU) | Score: 0 | Features matched: 
+- Easy Way To Make Eyes Look Bigger 🔥 #beautyhacks #2023 #eyemakeup (https://youtube.com/watch?v=xzn75xfJ33I) | Score: 0 | Features matched: 
+- Easy smokey eye tutorial #grwm #makeuptutorial #eyemakeup (https://youtube.com/watch?v=_sypYDWR5-g) | Score: 0 | Features matched: 
+- Almond-Shaped Eyes Makeup Advice : How to Apply Eyeshadow to Define Your Eyes: Almond-Shaped Eyes (https://youtube.com/watch?v=CMH4hxHcFqc) | Score: 0 | Features matched: 
+- Beginners Eye Makeup Tutorial | Parts of the Eye | How To Apply Eyeshadow (https://youtube.com/watch?v=d8bct2_ix4U) | Score: 0 | Features matched: 
+- Soft smokey eyes 🖤✨ makeup tutorial #smokeyeye #smokeyeyemakeuptutorial #smokeyeyes (https://youtube.com/watch?v=6aw5uxpJQqk) | Score: 0 | Features matched: 
+
+==============================
+🎨 User 2 features: {'eye_shape': 'round', 'nose': 'wide', 'lips': 'full'}
+==============================
+  🔍 Searching: makeup tutorial eyes round
+  🔍 Searching: makeup tutorial nose wide
+  🔍 Searching: makeup tutorial lips full
+  🔍 Searching: makeup tutorial eyes round nose wide
+  🔍 Searching: makeup tutorial eyes round lips full
+  🔍 Searching: makeup tutorial nose wide lips full
+  🔍 Searching: makeup tutorial eyes round nose wide lips full
+
+Top Matching Makeup Tutorials:
+- How To: Makeup for Round Eyes Tutorial | Eye Makeup Tutorials | Bobbi Brown Cosmetics (https://youtube.com/watch?v=wcBoTl78P8Y) | Score: 0 | Features matched: 
+- Beginners Eye Makeup Tutorial | Parts of the Eye | How To Apply Eyeshadow (https://youtube.com/watch?v=d8bct2_ix4U) | Score: 0 | Features matched: 
+- Who Knew THIS Is The Best Beginner Eyeshadow Technique? (https://youtube.com/watch?v=uUAvAV6VplA) | Score: 0 | Features matched: 
+- Quick tricks to elevate your eye makeup ✨ #makeuptutorial (https://youtube.com/watch?v=4kD3vngSOPY) | Score: 0 | Features matched: 
+- Everyone loves this quick eye makeup (https://youtube.com/watch?v=rrgh0C2XAo4) | Score: 0 | Features matched: 
+- WARM TONE MAKEUP ⪼ (https://youtube.com/watch?v=XDEnnYwbx_w) | Score: 0 | Features matched: 
+- Simple &amp; Elegant Douyin Eye Makeup #douyin #makeuptutorial #youtubeshorts (https://youtube.com/watch?v=3TzyGYMPIjU) | Score: 0 | Features matched: 
+- Easiest eye makeup tutorial (https://youtube.com/watch?v=Wq1PXFUxkuU) | Score: 0 | Features matched: 
+- Hooded Eyeshadow Tutorial for Mature Sagging Lids #hoodedeyes #maturemakeup (https://youtube.com/watch?v=GM-4JpMhXsA) | Score: 0 | Features matched: 
+- ROMANTIC GOTH TUTORIAL 🥀🖤🦇 high contrast makeup (https://youtube.com/watch?v=PWs7SJzjzow) | Score: 0 | Features matched: 
+
+==============================
+🎨 User 3 features: {'eye_shape': 'monolid', 'nose': 'medium', 'lips': 'full'}
+==============================
+  🔍 Searching: makeup tutorial eyes monolid
+  🔍 Searching: makeup tutorial nose medium
+  🔍 Searching: makeup tutorial lips full
+  🔍 Searching: makeup tutorial eyes monolid nose medium
+  🔍 Searching: makeup tutorial eyes monolid lips full
+  🔍 Searching: makeup tutorial nose medium lips full
+  🔍 Searching: makeup tutorial eyes monolid nose medium lips full
+
+Top Matching Makeup Tutorials:
+- MONOLID MAKEUP TUTORIAL | FENTY BEAUTY (https://youtube.com/watch?v=QWZl5ujH8uE) | Score: 0 | Features matched: 
+- Monolid Eyeshape | Lashes | Makeup | Beauty (https://youtube.com/watch?v=nTLLKBEj5Sk) | Score: 0 | Features matched: 
+- Monolid makeup? Let me serve rrr🙈💋 #jennie #doechii #extraL #monolid #makeup #kbeauty  #korean (https://youtube.com/watch?v=gs0Z99qZkA4) | Score: 0 | Features matched: 
+- Simple &amp; Elegant Douyin Eye Makeup #douyin #makeuptutorial #youtubeshorts (https://youtube.com/watch?v=3TzyGYMPIjU) | Score: 0 | Features matched: 
+- WARM TONE MAKEUP ⪼ (https://youtube.com/watch?v=XDEnnYwbx_w) | Score: 0 | Features matched: 
+- Should you wing your eyeliner up or down?🤔 simple test based on your eye shape #shorts (https://youtube.com/watch?v=g260LV1YLAs) | Score: 0 | Features matched: 
+- [무쌍 메이크업] MONOLID/HOODED EYE DAILY MAKEUP TUTORIAL | 2024 UPDATE (https://youtube.com/watch?v=DpMPeiVktxc) | Score: 0 | Features matched: 
+- VERTICALLY VS HORIZONTALLY ENLARGED EYE MAKEUP | MONOLID/HOODED ASIAN EYES (https://youtube.com/watch?v=pA0OEJb-dbY) | Score: 0 | Features matched: 
+- Smokey eye makeup💄🖤 #olens #monolid #makeup #grwm #kbeauty #hooded #smokey #easy #tutorial (https://youtube.com/watch?v=2lihopTr8UQ) | Score: 0 | Features matched: 
+- Eyeliner tutorial for monolids✨FULL GLAM LOOK! #eyeliner #kbeauty #hooded #korean #makeup #monolid (https://youtube.com/watch?v=X-0SxkNXykQ) | Score: 0 | Features matched: 
+
+==============================
+🎨 User 4 features: {'eye_shape': 'hooded', 'nose': 'wide', 'lips': 'thin'}
+==============================
+  🔍 Searching: makeup tutorial eyes hooded
+  🔍 Searching: makeup tutorial nose wide
+  🔍 Searching: makeup tutorial lips thin
+  🔍 Searching: makeup tutorial eyes hooded nose wide
+  🔍 Searching: makeup tutorial eyes hooded lips thin
+  🔍 Searching: makeup tutorial nose wide lips thin
+  🔍 Searching: makeup tutorial eyes hooded nose wide lips thin
+
+Top Matching Makeup Tutorials:
+- Hooded Eyeshadow Tutorial for Mature Sagging Lids #hoodedeyes #maturemakeup (https://youtube.com/watch?v=GM-4JpMhXsA) | Score: 0 | Features matched: 
+- This HOODED Eye Technique Doubles Up Your Lid Space!! (https://youtube.com/watch?v=VBCu9os-HKM) | Score: 0 | Features matched: 
+- This SIMPLE HOODED Eye Makeup Technique Is Better Than Winged Eyeliner | Risa Does Makeup (https://youtube.com/watch?v=C8VlJeaH3j8) | Score: 0 | Features matched: 
+- Must Try Beginner makeup tips for Extreme HOODED Eyes! (https://youtube.com/watch?v=g2EL_VwvQ8M) | Score: 0 | Features matched: 
+- The easiest trick for very hooded, deep-set eyes. #hoodedeyes #hoodedeyemakeup (https://youtube.com/watch?v=SLMLcGZ9y38) | Score: 0 | Features matched: 
+- ND MINI MASTERCLASS | How To Perfect Eyeshadow On Hooded Eyes (https://youtube.com/watch?v=nQTGhxfaiSQ) | Score: 0 | Features matched: 
+- BEST HOODED EYE MAKEUP HACK EVER! GAME CHANGER to LIFT DROOPY, SAGGY EYES! (https://youtube.com/watch?v=wXhTO-_zipU) | Score: 0 | Features matched: 
+- This trick on Hooded Eyes Doubles Up Lid Space!! (https://youtube.com/watch?v=7a5pAQyFC-g) | Score: 0 | Features matched: 
+- HOODED EYES MAKEUP TUTORIAL |  Eyeshadow Tips for Downturned Eyes | Dominique Sachse (https://youtube.com/watch?v=gj98OYuu6-M) | Score: 0 | Features matched: 
+- THE EASY &#39;HONEST&#39; HOODED EYE TUTORIAL! (https://youtube.com/watch?v=t7i7fluyXuU) | Score: 0 | Features matched: 
+
+✅ Results saved to results.json

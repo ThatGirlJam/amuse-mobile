@@ -1,0 +1,24 @@
+{
+  "features": [
+    {
+      "eye_shape": "almond",
+      "nose": "medium",
+      "lips": "full"
+    },
+    {
+      "eye_shape": "round",
+      "nose": "wide",
+      "lips": "full"
+    },
+    {
+      "eye_shape": "monolid",
+      "nose": "medium",
+      "lips": "full"
+    },
+    {
+      "eye_shape": "hooded",
+      "nose": "wide",
+      "lips": "thin"
+    }
+  ]
+}
