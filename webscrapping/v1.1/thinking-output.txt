@@ -1,0 +1,93 @@
+==============================
+🎨 User 1 features: {'eye_shape': 'almond', 'nose': 'medium', 'lips': 'full'}
+==============================
+  🔍 Searching: makeup tutorial almond
+  🔍 Searching: makeup tutorial medium
+  🔍 Searching: makeup tutorial full
+  🔍 Searching: makeup tutorial almond medium
+  🔍 Searching: makeup tutorial almond full
+  🔍 Searching: makeup tutorial medium full
+  🔍 Searching: makeup tutorial almond medium full
+
+Top Matching Makeup Tutorials:
+- HOW TO: Almond Eye Shape Guide | Lashes | Makeup | Beauty (https://youtube.com/watch?v=uEd0gWy8e9Y) | Score: 1 | Features: ['almond']
+- Transforming my Almond Eyes to Doe Eyes #doeeyes #makeupshorts #makeuptutorial (https://youtube.com/watch?v=69IAsS7RmkU) | Score: 1 | Features: ['almond']
+- ALMOND EYE Makeup DOs (https://youtube.com/watch?v=G5EBoEr5K58) | Score: 1 | Features: ['almond']
+- HOW TO DO MAKEUP FOR ALMOND EYE SHAPE + how to get to know your face (https://youtube.com/watch?v=zopyg5VYZww) | Score: 1 | Features: ['almond']
+- Full Glam Tutorial ✨😍✨ #makeup #makeuptutorial #makeupshorts (https://youtube.com/watch?v=hbstT1uZpQw) | Score: 1 | Features: ['full']
+- FULL COVERAGE Makeup Tutorial (https://youtube.com/watch?v=IIg1MlvkiuQ) | Score: 1 | Features: ['full']
+- FULL FACE OF FLAWLESS In-Depth Makeup Tutorial | NikkieTutorials (https://youtube.com/watch?v=dhLCzSwUTvc) | Score: 1 | Features: ['full']
+- FLAWLESS FULL Glam Makeup Tutorial: Learn how to do it like a PRO (https://youtube.com/watch?v=5IdBlL99vKI) | Score: 1 | Features: ['full']
+- MEDIUM CONTRAST MAKEUP Tutorial 🤎 (https://youtube.com/watch?v=089Q7gWNA8Q) | Score: 1 | Features: ['medium']
+- How to: Full Coverage Glam Makeup that&#39;s NOT Cakey (https://youtube.com/watch?v=Kp7VFnzyK1k) | Score: 1 | Features: ['full']
+
+==============================
+🎨 User 2 features: {'eye_shape': 'round', 'nose': 'wide', 'lips': 'full'}
+==============================
+  🔍 Searching: makeup tutorial round
+  🔍 Searching: makeup tutorial wide
+  🔍 Searching: makeup tutorial full
+  🔍 Searching: makeup tutorial round wide
+  🔍 Searching: makeup tutorial round full
+  🔍 Searching: makeup tutorial wide full
+  🔍 Searching: makeup tutorial round wide full
+
+Top Matching Makeup Tutorials:
+- How to contour round wide/ round face ✨ #howtocontour #contourtutorial #drugstoremakeup (https://youtube.com/watch?v=dXoBOaNNZGI) | Score: 2 | Features: ['round', 'wide']
+- Trying the Asian vertical contour for round vs oval face shapes makeup hack✨Tia Obed (https://youtube.com/watch?v=LeJRWr5jzV8) | Score: 2 | Features: ['round', 'wide']
+- Slim vs Round Face Makeup Placement l Christen Dominique (https://youtube.com/watch?v=vXzvD7L2Oeo) | Score: 1 | Features: ['round']
+- How to contour a round face! #contour #shorts (https://youtube.com/watch?v=EcWJPb0G8c8) | Score: 1 | Features: ['round']
+- HOW TO CONTOUR ROUND FACE (https://youtube.com/watch?v=LfE8luFTM0w) | Score: 1 | Features: ['round']
+- Round/ square face contour tutorial #makeuptips #makeuphacks #contour #contouring #makeuptutorial (https://youtube.com/watch?v=TfHp-1NuAuE) | Score: 1 | Features: ['round']
+- For my round face girlies 😘 ✨ #roundface #contour #contouringhack #contourtip (https://youtube.com/watch?v=lC_gnx13qE4) | Score: 1 | Features: ['round']
+- HOW TO CONTOUR ROUND FACE - Hacks, Tips &amp; Tricks for Beginners! (https://youtube.com/watch?v=0d49yli4fAI) | Score: 1 | Features: ['round']
+- Wide Face Makeup Placement l Christen Dominique (https://youtube.com/watch?v=LqhMDpH4ktw) | Score: 1 | Features: ['wide']
+- how korean celebrities with wide face shapes contour their face I #shorts (https://youtube.com/watch?v=3yN588dEVyk) | Score: 1 | Features: ['wide']
+
+==============================
+🎨 User 3 features: {'eye_shape': 'monolid', 'nose': 'medium', 'lips': 'full'}
+==============================
+  🔍 Searching: makeup tutorial monolid
+  🔍 Searching: makeup tutorial medium
+  🔍 Searching: makeup tutorial full
+  🔍 Searching: makeup tutorial monolid medium
+  🔍 Searching: makeup tutorial monolid full
+  🔍 Searching: makeup tutorial medium full
+  🔍 Searching: makeup tutorial monolid medium full
+
+Top Matching Makeup Tutorials:
+- Eyeliner tutorial for monolids✨FULL GLAM LOOK! #eyeliner #kbeauty #hooded #korean #makeup #monolid (https://youtube.com/watch?v=X-0SxkNXykQ) | Score: 2 | Features: ['monolid', 'full']
+- MONOLID MAKEUP TUTORIAL | FENTY BEAUTY (https://youtube.com/watch?v=QWZl5ujH8uE) | Score: 1 | Features: ['monolid']
+- [무쌍 메이크업] MONOLID/HOODED EYE DAILY MAKEUP TUTORIAL | 2024 UPDATE (https://youtube.com/watch?v=DpMPeiVktxc) | Score: 1 | Features: ['monolid']
+- Monolid makeup? Let me serve rrr🙈💋 #jennie #doechii #extraL #monolid #makeup #kbeauty  #korean (https://youtube.com/watch?v=gs0Z99qZkA4) | Score: 1 | Features: ['monolid']
+- [무쌍 메이크업] KOREAN EYE MAKEUP TUTORIAL FOR MONOLID &amp; HOODED EYES (https://youtube.com/watch?v=vRqBMZ2-6SQ) | Score: 1 | Features: ['monolid']
+- Monolid Eyeshape | Lashes | Makeup | Beauty (https://youtube.com/watch?v=nTLLKBEj5Sk) | Score: 1 | Features: ['monolid']
+- Thank you all for loving this look🙈💗🫶🏼 #monolid #makeup #hooded #korean #asian #tutorial #easy (https://youtube.com/watch?v=Lvk-rGDiM0k) | Score: 1 | Features: ['monolid']
+- Full Glam Tutorial ✨😍✨ #makeup #makeuptutorial #makeupshorts (https://youtube.com/watch?v=hbstT1uZpQw) | Score: 1 | Features: ['full']
+- FULL COVERAGE Makeup Tutorial (https://youtube.com/watch?v=IIg1MlvkiuQ) | Score: 1 | Features: ['full']
+- FLAWLESS FULL Glam Makeup Tutorial: Learn how to do it like a PRO (https://youtube.com/watch?v=5IdBlL99vKI) | Score: 1 | Features: ['full']
+
+==============================
+🎨 User 4 features: {'eye_shape': 'hooded', 'nose': 'wide', 'lips': 'thin'}
+==============================
+  🔍 Searching: makeup tutorial hooded
+  🔍 Searching: makeup tutorial wide
+  🔍 Searching: makeup tutorial thin
+  🔍 Searching: makeup tutorial hooded wide
+  🔍 Searching: makeup tutorial hooded thin
+  🔍 Searching: makeup tutorial wide thin
+  🔍 Searching: makeup tutorial hooded wide thin
+
+Top Matching Makeup Tutorials:
+- Hooded Eyeshadow Tutorial for Mature Sagging Lids #hoodedeyes #maturemakeup (https://youtube.com/watch?v=GM-4JpMhXsA) | Score: 1 | Features: ['hooded']
+- This SIMPLE HOODED Eye Makeup Technique Is Better Than Winged Eyeliner | Risa Does Makeup (https://youtube.com/watch?v=C8VlJeaH3j8) | Score: 1 | Features: ['hooded']
+- This HOODED Eye Technique Doubles Up Your Lid Space!! (https://youtube.com/watch?v=VBCu9os-HKM) | Score: 1 | Features: ['hooded']
+- Must Try Beginner makeup tips for Extreme HOODED Eyes! (https://youtube.com/watch?v=g2EL_VwvQ8M) | Score: 1 | Features: ['hooded']
+- Sculpting the Eyes | Two Makeup Transformations for Hooded Lids (https://youtube.com/watch?v=Sy4bfS4FLQ4) | Score: 1 | Features: ['hooded']
+- The easiest trick for very hooded, deep-set eyes. #hoodedeyes #hoodedeyemakeup (https://youtube.com/watch?v=SLMLcGZ9y38) | Score: 1 | Features: ['hooded']
+- Hooded Eyes - simple makeup techniques for mature, hooded eyes (https://youtube.com/watch?v=BEY8gEaYnd8) | Score: 1 | Features: ['hooded']
+- This trick on Hooded Eyes Doubles Up Lid Space!! (https://youtube.com/watch?v=7a5pAQyFC-g) | Score: 1 | Features: ['hooded']
+- 2 Eyeshadows HOODED Eyes Makeup! (https://youtube.com/watch?v=-p6ckvVhNe0) | Score: 1 | Features: ['hooded']
+- BEST HOODED EYE MAKEUP HACK EVER! GAME CHANGER to LIFT DROOPY, SAGGY EYES! (https://youtube.com/watch?v=wXhTO-_zipU) | Score: 1 | Features: ['hooded']
+
+✅ Results saved to results.json
