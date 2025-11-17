@@ -60,7 +60,7 @@ export default function Login() {
           <button type="submit" className={styles.submitButton}>Log In</button>
         </form>
         <p className={styles.linkText}>
-          <Link href="/" className={styles.link}>Forgot Password?</Link>
+          <Link href="/forgot-password" className={styles.link}>Forgot Password?</Link>
         </p>
         <p className={styles.orText}>OR</p>
         <button type="button" className={styles.googleButton}>

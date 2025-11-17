@@ -16,7 +16,7 @@ export default function InitialPage() {
         />
         <div className={styles.buttonContainer}>
           <Link href="/login" className={styles.loginButton}>Log In</Link>
-          <Link href="/signup" className={styles.signUpButton}>Sign Up</Link>
+          <Link href="/sign-up" className={styles.signUpButton}>Sign Up</Link>
         </div>
       </div>
     </main>
