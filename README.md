@@ -1,4 +1,5 @@
 # Amuse
+
 **"Beauty that understands you."**
 
 Amuse is an AI-powered web application that identifies a user's facial features using computer vision, then recommends personalized makeup tutorials from YouTube that suit their unique features.
@@ -31,6 +32,7 @@ Amuse is an AI-powered web application that identifies a user's facial features 
 - SQLAlchemy ORM
 
 **Analysis Features:**
+
 - Custom geometric algorithms for facial feature classification
 - 478-point facial landmark detection
 - Confidence scoring for each classification
@@ -43,6 +45,28 @@ Amuse is an AI-powered web application that identifies a user's facial features 
 - Python 3.8+
 - PostgreSQL
 - Supabase account and project
+
+**Install PostgreSQL:**
+
+macOS:
+```bash
+brew install postgresql@15
+brew services start postgresql@15
+
+# Add PostgreSQL to PATH
+echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Linux (Ubuntu/Debian):
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql
+```
+
+Windows:
+Download and install from [postgresql.org](https://www.postgresql.org/download/windows/)
 
 ### Installation
 
@@ -79,7 +103,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set up PostgreSQL
+# Set up PostgreSQL database
 createdb facial_analysis
 python init_db.py
 
@@ -321,7 +345,7 @@ Handle Google OAuth callback (automatically called by Google).
 #### Frontend API Service (`lib/api.js`)
 
 ```javascript
-import { analyzeFace, getAnalysisResults } from '../lib/api';
+import { analyzeFace, getAnalysisResults } from "../lib/api";
 
 // Analyze image
 const result = await analyzeFace(imageFile, saveToDb);
@@ -524,6 +548,7 @@ Get cached YouTube API results by query.
 ## Environment Variables
 
 **Frontend (`.env.local`):**
+
 ```env
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -540,6 +565,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 **Backend (`backend/.env`):**
+
 ```env
 FLASK_HOST=0.0.0.0
 FLASK_PORT=5000
