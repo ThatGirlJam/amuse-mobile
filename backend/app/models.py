@@ -1,78 +1,49 @@
 """
 Database models for facial analysis results
 
-Uses SQLAlchemy ORM with PostgreSQL
+Uses SQLAlchemy ORM with PostgreSQL/Supabase
 """
 
-from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, create_engine
+from sqlalchemy import Column, String, DateTime, create_engine
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+import uuid
 import os
 
 Base = declarative_base()
 
 
-class AnalysisResult(Base):
+class FeatureAnalysis(Base):
     """
-    Model for storing facial analysis results
+    Model for storing facial feature analysis
+    Schema matches the Feature Analysis table from database design
     """
-    __tablename__ = 'analysis_results'
+    __tablename__ = 'feature_analysis'
 
-    # Primary key
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    # Primary key - UUID for Supabase compatibility
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    # Feature classifications
+    eye_shape = Column(String(50), nullable=False)  # e.g., "almond", "round"
+    nose = Column(String(50), nullable=False)       # e.g., "medium", "wide"
+    lips = Column(String(50), nullable=False)       # e.g., "full", "thin"
 
     # Timestamp
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-
-    # Eye analysis
-    eye_shape = Column(String(50), nullable=False)
-    eye_secondary_features = Column(JSON)  # Array of secondary features
-    eye_confidence = Column(Float)
-
-    # Nose analysis
-    nose_width = Column(String(50), nullable=False)
-    nose_confidence = Column(Float)
-
-    # Lip analysis
-    lip_fullness = Column(String(50), nullable=False)
-    lip_balance = Column(String(50))
-    lip_confidence = Column(Float)
-
-    # Overall metrics
-    overall_confidence = Column(Float)
-
-    # Full analysis data (stored as JSON for detailed retrieval)
-    full_analysis = Column(JSON, nullable=False)
-
-    # Summary data
-    description = Column(String(500))
-    search_tags = Column(JSON)  # Array of search tags
+    created_at = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
 
     def __repr__(self):
-        return f"<AnalysisResult(id={self.id}, created_at={self.created_at})>"
+        return f"<FeatureAnalysis(id={self.id}, eye_shape={self.eye_shape}, nose={self.nose}, lips={self.lips})>"
 
     def to_dict(self):
         """Convert model to dictionary for API responses"""
         return {
-            'id': self.id,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'features': {
-                'eye_shape': self.eye_shape,
-                'eye_secondary': self.eye_secondary_features,
-                'nose_width': self.nose_width,
-                'lip_fullness': self.lip_fullness,
-                'lip_balance': self.lip_balance
-            },
-            'confidence': {
-                'eye': self.eye_confidence,
-                'nose': self.nose_confidence,
-                'lip': self.lip_confidence,
-                'overall': self.overall_confidence
-            },
-            'description': self.description,
-            'search_tags': self.search_tags,
-            'full_analysis': self.full_analysis
+            'id': str(self.id),
+            'eye_shape': self.eye_shape,
+            'nose': self.nose,
+            'lips': self.lips,
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
 
@@ -87,14 +58,16 @@ class Database:
         Initialize database connection
 
         Args:
-            database_url: PostgreSQL connection URL
+            database_url: PostgreSQL/Supabase connection URL
                          Format: postgresql://user:password@host:port/database
         """
         if database_url is None:
-            database_url = os.getenv(
-                'DATABASE_URL',
-                'postgresql://postgres:postgres@localhost:5432/facial_analysis'
-            )
+            database_url = os.getenv('DATABASE_URL')
+            if not database_url:
+                raise ValueError(
+                    "DATABASE_URL environment variable is not set. "
+                    "Please set it in your .env file with your Supabase connection string."
+                )
 
         self.engine = create_engine(database_url, echo=False)
         self.SessionLocal = sessionmaker(
