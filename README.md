@@ -1,4 +1,5 @@
 # Amuse
+
 **"Beauty that understands you."**
 
 Amuse is an AI-powered web application that identifies a user's facial features using computer vision, then recommends personalized makeup tutorials from YouTube that suit their unique features.
@@ -7,26 +8,24 @@ Amuse is an AI-powered web application that identifies a user's facial features 
 
 - 📸 **Image Upload & Camera Capture** - Upload photos or take selfies
 - 🤖 **AI Facial Analysis** - Powered by Google MediaPipe Face Landmarker
-- 👁️ **Eye Shape Detection** - Almond, Round, Monolid, Hooded, Upturned, Downturned
-- 👃 **Nose Width Analysis** - Narrow, Medium, Wide
-- 💋 **Lip Fullness Classification** - Thin, Medium, Full
-- 🎥 **YouTube Tutorial Tags** - Personalized search queries for makeup content
-- 💾 **Result Storage** - PostgreSQL database for analysis history
 
 ## Tech Stack
 
 **Frontend:**
+
 - Next.js 14 (React 18)
 - CSS Modules
 - Responsive design (mobile-first)
 
 **Backend:**
+
 - Python Flask API
 - Google MediaPipe Face Landmarker for computer vision
 - PostgreSQL database
 - SQLAlchemy ORM
 
 **Analysis Features:**
+
 - Custom geometric algorithms for facial feature classification
 - 478-point facial landmark detection
 - Confidence scoring for each classification
@@ -38,6 +37,28 @@ Amuse is an AI-powered web application that identifies a user's facial features 
 - Node.js 18+ and npm
 - Python 3.8+
 - PostgreSQL
+
+**Install PostgreSQL:**
+
+macOS:
+```bash
+brew install postgresql@15
+brew services start postgresql@15
+
+# Add PostgreSQL to PATH
+echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Linux (Ubuntu/Debian):
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql
+```
+
+Windows:
+Download and install from [postgresql.org](https://www.postgresql.org/download/windows/)
 
 ### Installation
 
@@ -69,7 +90,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set up PostgreSQL
+# Set up PostgreSQL database
 createdb facial_analysis
 python init_db.py
 
@@ -142,7 +163,7 @@ amuse-mobile/
 ### Frontend API Service (`lib/api.js`)
 
 ```javascript
-import { analyzeFace, getAnalysisResults } from '../lib/api';
+import { analyzeFace, getAnalysisResults } from "../lib/api";
 
 // Analyze image
 const result = await analyzeFace(imageFile, saveToDb);
@@ -201,11 +222,13 @@ See `/backend/README.md` for detailed API documentation.
 ## Environment Variables
 
 **Frontend (`.env.local`):**
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 **Backend (`backend/.env`):**
+
 ```env
 FLASK_HOST=0.0.0.0
 FLASK_PORT=5000
@@ -269,4 +292,3 @@ Developed by the Amuse team for personalized makeup recommendations.
 ## License
 
 Educational project.
-
