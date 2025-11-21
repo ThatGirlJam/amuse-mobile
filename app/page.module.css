@@ -115,240 +115,107 @@
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+  color: var(--color-text-dark);
 }
 
-.infoCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.infoIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.infoCard h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin: 0;
-  margin-bottom: 0.5rem;
-}
-
-.infoCard p {
-  font-size: 0.875rem;
-  color: #718096;
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  color: white;
-  opacity: 0.8;
-  font-size: 0.875rem;
-  padding: 2rem 0;
-}
-
-.footer p {
-  margin: 0;
-}
-
-/* Message Section */
-.messageSection {
-  margin-bottom: 3rem;
+.header {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-}
-
-/* Results Section */
-.resultsSection {
-  margin-bottom: 3rem;
-  scroll-margin-top: 2rem;
-}
-
-/* Loading Section */
-.loadingSection {
-  margin-bottom: 3rem;
-}
-
-.loadingSkeleton {
-  background-color: white;
-  border-radius: 16px;
-  padding: 2.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.5s ease-in;
-}
-
-.skeletonHeader {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.skeletonTitle {
-  height: 2rem;
-  width: 60%;
-  margin: 0 auto 1rem;
-  background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-  border-radius: 8px;
-}
-
-.skeletonText {
-  height: 1rem;
-  width: 80%;
-  margin: 0 auto;
-  background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-  border-radius: 8px;
-}
-
-.skeletonCards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.skeletonCard {
-  height: 250px;
-  background: linear-gradient(90deg, #e2e8f0 25%, #f7fafc 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-  border-radius: 12px;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.loadingMessage {
-  text-align: center;
-  padding: 2rem;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-  border-radius: 12px;
-  margin-top: 2rem;
-}
-
-.loadingIcon {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 1rem;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.loadingMessage p {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin: 0 0 0.5rem 0;
-}
-
-.loadingSubtext {
-  font-size: 0.875rem;
-  color: #718096;
-  display: block;
-}
-
-.errorMessage,
-.successMessage {
-  background-color: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 1.5rem;
-  max-width: 600px;
   width: 100%;
 }
 
-.errorMessage {
-  border-left: 4px solid #f56565;
-}
-
-.successMessage {
-  border-left: 4px solid #48bb78;
-}
-
-.errorIcon,
-.successIcon {
-  font-size: 2.5rem;
-  flex-shrink: 0;
-}
-
-.errorMessage h3 {
-  color: #c53030;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
-}
-
-.successMessage h3 {
-  color: #2f855a;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
-}
-
-.errorMessage p,
-.successMessage p {
-  color: #718096;
+.header .logo {
   margin: 0 0 1rem 0;
-  line-height: 1.6;
+  width: 55%;
+  max-width: 300px;
+  height: auto;
+  object-fit: contain;
 }
 
-.resultPreview {
-  background-color: #f7fafc;
-  padding: 1rem;
-  border-radius: 8px;
-  color: #4a5568 !important;
-  font-style: italic;
-  margin-top: 1rem !important;
+@media (max-width: 768px) {
+  .header .logo {
+    max-width: 250px;
+  }
 }
 
-.messageActions {
+@media (max-width: 480px) {
+  .header .logo {
+    max-width: 200px;
+  }
+  
+  .main {
+    padding: 1rem;
+  }
+}
+
+.buttonContainer {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin-top: 1.5rem;
+  width: 100%;
+  max-width: 200px;
+  margin: 2rem 0;
 }
 
-.retryButton,
-.viewResultsButton,
-.newAnalysisButton {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
+.loginButton,
+.signUpButton {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
+  border: none;
+  border-radius: 25px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: none;
+  font-family: inherit;
+  text-decoration: none;
+  display: block;
+  text-align: center;
 }
 
-.retryButton {
-  background-color: #667eea;
-  color: white;
+.loginButton {
+  background-color: var(--color-secondary-bg-dark);
+  color: var(--color-text-dark);
 }
 
-.retryButton:hover:not(:disabled) {
-  background-color: #5568d3;
+/* .loginButton:hover {
+  background-color: #7a1a1b;
   transform: translateY(-1px);
+} */
+
+.loginButton:active {
+  transform: translateY(0);
+}
+
+.signUpButton {
+  background-color: var(--color-secondary-bg-light);
+  color: var(--color-text-light);
+}
+/* 
+.signUpButton:hover {
+  background-color: var(--color-logo-main);
+  color: #ffffff;
+  transform: translateY(-1px);
+} */
+
+.signUpButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .buttonContainer {
+    max-width: 180px;
+    margin: 1.5rem 0;
+  }
+  
+  .loginButton,
+  .signUpButton {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
 }
 
 .retryButton:disabled {
