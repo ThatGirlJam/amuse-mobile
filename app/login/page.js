@@ -1,14 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './page.module.css'
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    router.push('/home')
   }
 
   return (
@@ -24,7 +31,7 @@ export default function Login() {
         <p className={styles.placeholderText}>Please enter your details to proceed.</p>
         <br />
         <br />
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>Username or Email</label>
             <input

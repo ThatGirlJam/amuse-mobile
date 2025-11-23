@@ -9,6 +9,9 @@
   color: var(--color-text-dark);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 .topBar {
@@ -50,7 +53,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
   margin: 1rem auto;
   padding: 0 1rem;
   padding-bottom: calc(65vh + 150px);

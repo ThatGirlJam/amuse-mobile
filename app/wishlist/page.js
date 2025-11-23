@@ -1,0 +1,77 @@
+'use client'
+
+import Image from 'next/image'
+import Link from 'next/link'
+import styles from './page.module.css'
+
+export default function Wishlist() {
+
+  return (
+    <main className={styles.main}>
+      <div className={styles.topBar}>
+        <div className={styles.topBarLeft}></div>
+        <h2 className={styles.pageTitle}>Saved</h2>
+        <button className={styles.searchButton}>
+          <Image
+            src="/images/search.png"
+            alt="Search"
+            width={24}
+            height={24}
+            className={styles.searchIcon}
+          />
+        </button>
+      </div>
+      <div className={styles.content}>
+      </div>
+
+      <nav className={styles.bottomNav}>
+        <Link href="/home" className={styles.navItem}>
+          <Image
+            src="/images/home.png"
+            alt="Home"
+            width={24}
+            height={24}
+            className={styles.navIcon}
+          />
+        </Link>
+        <Link href="/categories" className={styles.navItem}>
+          <Image
+            src="/images/categories.png"
+            alt="Categories"
+            width={24}
+            height={24}
+            className={styles.navIcon}
+          />
+        </Link>
+        <Link href="/wishlist" className={styles.navItem}>
+          <Image
+            src="/images/wishlist_selected.png"
+            alt="Wishlist"
+            width={24}
+            height={24}
+            className={styles.navIcon}
+          />
+        </Link>
+        <Link href="/cart" className={styles.navItem}>
+          <Image
+            src="/images/cart.png"
+            alt="Cart"
+            width={24}
+            height={24}
+            className={styles.navIcon}
+          />
+        </Link>
+        <Link href="/profile" className={styles.navItem}>
+          <Image
+            src="/images/profile.png"
+            alt="Profile"
+            width={24}
+            height={24}
+            className={styles.navIcon}
+          />
+        </Link>
+      </nav>
+    </main>
+  )
+}
+

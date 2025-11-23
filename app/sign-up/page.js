@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './page.module.css'
 
 export default function SignUp() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -16,6 +18,15 @@ export default function SignUp() {
     setShowConfirmPassword(!showConfirmPassword)
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    router.push('/onboarding')
+  }
+
+  const handleGoogleSignUp = () => {
+    router.push('/onboarding')
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.topBar}>
@@ -25,7 +36,7 @@ export default function SignUp() {
         <h1 className={styles.title}>Sign Up</h1>
       </div>
       <div className={styles.container}>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="name" className={styles.label}>Full Name</label>
             <input
@@ -116,7 +127,7 @@ export default function SignUp() {
         <button type="submit" className={styles.submitButton}>Sign Up</button>
         </form>
         <p className={styles.orText}>OR</p>
-        <button type="button" className={styles.googleButton}>
+        <button type="button" className={styles.googleButton} onClick={handleGoogleSignUp}>
           <svg className={styles.googleIcon} viewBox="0 0 24 24" width="20" height="20">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>

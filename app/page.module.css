@@ -8,6 +8,9 @@
   text-align: center;
   background-color: #ffffff;
   color: var(--color-text-dark);
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 .header {
@@ -16,6 +19,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 480px;
 }
 
 .header .logo {
