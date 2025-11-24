@@ -40,7 +40,7 @@ export default function Login() {
     try {
       await signIn(email, password)
       // Redirect to home or dashboard after successful login
-      router.push('/')
+      router.push('/home')
       router.refresh()
     } catch (err) {
       setError(err.message || 'Failed to sign in. Please check your credentials.')
