@@ -22,6 +22,8 @@ export default function Login() {
     
     if (signup === 'success') {
       setSuccess('Account created successfully! Please check your email to verify your account.')
+      // Store signup success flag to redirect to onboarding after login
+      sessionStorage.setItem('redirectToOnboarding', 'true')
     }
     if (passwordReset === 'success') {
       setSuccess('Password reset successfully! You can now log in with your new password.')
@@ -39,8 +41,15 @@ export default function Login() {
 
     try {
       await signIn(email, password)
-      // Redirect to home or dashboard after successful login
-      router.push('/home')
+      // Check if user should be redirected to onboarding (after signup)
+      const redirectToOnboarding = sessionStorage.getItem('redirectToOnboarding')
+      if (redirectToOnboarding === 'true') {
+        sessionStorage.removeItem('redirectToOnboarding')
+        router.push('/onboarding')
+      } else {
+        // Redirect to home or dashboard after successful login
+        router.push('/home')
+      }
       router.refresh()
     } catch (err) {
       setError(err.message || 'Failed to sign in. Please check your credentials.')

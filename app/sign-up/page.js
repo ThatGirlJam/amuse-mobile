@@ -71,8 +71,27 @@ export default function SignUp() {
     setLoading(true)
 
     try {
-      await signInWithGoogle()
-      // The redirect will happen automatically
+      // Pass signup parameter to redirect new users to onboarding
+      const response = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          redirectTo: `${window.location.origin}/api/auth/google/callback?next=/&signup=true`,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to initiate Google sign up')
+      }
+
+      // Redirect to Google OAuth URL
+      if (data.url) {
+        window.location.href = data.url
+      }
     } catch (err) {
       setError(err.message || 'Failed to sign up with Google.')
       setLoading(false)

@@ -14,6 +14,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url)
     const code = searchParams.get('code')
     const next = searchParams.get('next') || '/'
+    const isSignup = searchParams.get('signup') === 'true'
 
     if (!code) {
       return NextResponse.redirect(new URL('/login?error=missing_code', request.url))
@@ -30,8 +31,9 @@ export async function GET(request) {
 
     // Check if user record exists, if not create it
     const { data: existingUser } = await getUserById(authData.user.id)
+    const isNewUser = !existingUser
     
-    if (!existingUser) {
+    if (isNewUser) {
       // Create user record
       await createUser({
         id: authData.user.id,
@@ -57,6 +59,11 @@ export async function GET(request) {
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7 // 7 days
     })
+
+    // Redirect new users from signup to onboarding
+    if (isSignup && isNewUser) {
+      return NextResponse.redirect(new URL('/onboarding', request.url))
+    }
 
     return NextResponse.redirect(new URL(next, request.url))
   } catch (error) {
