@@ -46,6 +46,7 @@ export async function GET(request) {
         full_name: userData?.full_name || null,
         mobile_number: userData?.mobile_number || null,
         date_of_birth: userData?.date_of_birth || null,
+        profile_picture_url: userData?.profile_picture_url || null,
         created_at: authUser.created_at
       },
       session: {

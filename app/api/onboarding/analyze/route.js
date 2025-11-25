@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
 import { createClient } from '@supabase/supabase-js'
-import { getUserById, updateUser, linkFeatureAnalysisToUser } from '@/lib/db/users'
+import { getUserById, linkFeatureAnalysisToUser } from '@/lib/db/users'
 import { createFeatureAnalysis, getFeatureAnalysisById, deleteFeatureAnalysis } from '@/lib/db/feature-analysis'
 import FormData from 'form-data'
 import fetch from 'node-fetch'
@@ -245,14 +245,20 @@ export async function POST(request) {
       )
     }
 
-    // Update user with profile picture URL
-    const { error: updateError } = await updateUser(authUser.id, {
-      profile_picture_url: imageUrl
-    })
+    // Update user with profile picture URL using service role client
+    const { error: updateError } = await serviceSupabase
+      .from('users')
+      .update({ profile_picture_url: imageUrl })
+      .eq('id', authUser.id)
+      .select()
+      .single()
 
     if (updateError) {
       console.error('Error updating user profile picture:', updateError)
-      // Don't fail the request if profile picture update fails, but log it
+      return NextResponse.json(
+        { error: 'Failed to update profile picture', details: updateError.message },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({
