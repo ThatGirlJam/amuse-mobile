@@ -2,6 +2,31 @@
 "Beauty that understands you." aMuse is an application that aims to identify a user's facial features and skin tone, 
 using this information to recommend makeup products and tutorials that would suit the user. 
 
+## Quick Start
+
+**First-time setup:** See [Installation](#installation) section below to install dependencies and set up the CV model.
+
+**To run the application, you need to start two services in order:**
+
+### Step 1: Start CV Model Service
+Open Terminal 1:
+```bash
+cd cv_model
+source venv/bin/activate
+python3 run.py
+```
+Wait until you see: `Server running at: http://0.0.0.0:5000`
+
+### Step 2: Start Next.js App
+Open Terminal 2 (keep Terminal 1 running):
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`
+
+**⚠️ Important:** The CV model service must be running before starting the Next.js app, otherwise the onboarding feature will fail.
+
 ## Tech Stack 
 Our responsive web application makes use of:
 - React for the UI components and flows
@@ -16,40 +41,183 @@ Our responsive web application makes use of:
 ### Prerequisites
 - Node.js (v18 or higher)
 - npm or yarn
+- Python 3.11 (required for MediaPipe - see note below)
 - Supabase account and project
+
+**Note on Python:** The CV model requires Python 3.11 or earlier (MediaPipe doesn't support Python 3.12+). If you have Python 3.14, install Python 3.11:
+```bash
+brew install python@3.11
+```
 
 ### Installation
 
-1. Clone the repository
-2. Install dependencies:
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd amuse-mobile
+   ```
+   This will download the project files, including `package.json` and `cv_model/requirements.txt`.
+
+2. **Install Node.js dependencies:**
    ```bash
    npm install
    ```
+   This installs all Node.js packages listed in `package.json` (including Next.js, Supabase client, etc.).
 
-3. Set up environment variables:
+3. **Set up CV Model Python environment:**
+   ```bash
+   cd cv_model
+   python3.11 -m venv venv
+   source venv/bin/activate
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+   
+   This creates a Python virtual environment and installs all Python packages listed in `requirements.txt` (including Flask, MediaPipe, etc.).
+   
+   **Note:** If you don't have `python3.11`, use `python3` (but ensure it's Python 3.11 or earlier).
+
+4. **Download MediaPipe model file:**
+   ```bash
+   mkdir -p models
+   curl -L -o models/face_landmarker.task \
+     https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
+   ```
+   
+   This downloads the face landmarker model (3.6MB) required for facial analysis. The model file is not included in the repository due to size.
+
+5. Set up environment variables:
    Create a `.env.local` file in the root directory with the following:
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://felejuwmpqwocqerhcnn.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
    YOUTUBE_DATA_API_KEY=your_youtube_api_key_here
+   CV_MODEL_API_URL=http://localhost:5000
    ```
    
    - You can find your Supabase anon key in your Supabase project settings under API.
+   - **IMPORTANT**: Get your Supabase service role key from your Supabase project settings under API → Service Role Key. This key bypasses RLS policies and should NEVER be exposed to the client. Keep it secret!
    - Get your YouTube Data API key from [Google Cloud Console](https://console.cloud.google.com/). Enable the YouTube Data API v3 for your project.
+   - `CV_MODEL_API_URL` is the URL of your CV model API (defaults to `http://localhost:5000` if not set). **Note:** On macOS, port 5000 may be used by AirPlay Receiver. If you encounter port conflicts, either disable AirPlay Receiver in System Settings or change the port in `cv_model/run.py` and update this environment variable.
 
-4. Run the development server:
+6. **Start the CV Model Service** (Required for onboarding feature):
+   
+   Open a **new terminal window** and run:
+   ```bash
+   cd cv_model
+   source venv/bin/activate
+   python3 run.py
+   ```
+   
+   You should see:
+   ```
+   ╔═══════════════════════════════════════════╗
+   ║  Facial Analysis API - Development Server ║
+   ╚═══════════════════════════════════════════╝
+   
+   Server running at: http://0.0.0.0:5000
+   Health check: http://0.0.0.0:5000/api/health
+   ```
+   
+   **Keep this terminal window open** - the CV model service must be running for the onboarding feature to work.
+
+7. **Start the Next.js Development Server**:
+   
+   In a **separate terminal window**, run:
    ```bash
    npm run dev
    ```
+   
+   The app will be available at `http://localhost:3000`
+
+## Running the Application
+
+**You need TWO terminal windows** - one for each service:
+
+### Terminal 1: CV Model Service (Start First)
+```bash
+cd cv_model
+source venv/bin/activate
+python3 run.py
+```
+
+**Expected output:**
+```
+╔═══════════════════════════════════════════╗
+║  Facial Analysis API - Development Server ║
+╚═══════════════════════════════════════════╝
+
+Server running at: http://0.0.0.0:5000
+Health check: http://0.0.0.0:5000/api/health
+
+Press CTRL+C to stop the server
+```
+
+**✅ Keep this terminal open** - the service must stay running.
+
+### Terminal 2: Next.js Development Server (Start Second)
+```bash
+npm run dev
+```
+
+**Expected output:**
+```
+- ready started server on 0.0.0.0:3000, url: http://localhost:3000
+```
+
+**✅ Keep this terminal open** - the app must stay running.
+
+### Verifying Everything Works
+
+1. **Check CV Model:** Open `http://localhost:5000/api/health` in your browser
+   - Should return: `{"status": "healthy", ...}`
+
+2. **Check Next.js App:** Open `http://localhost:3000` in your browser
+   - Should show the aMuse homepage
+
+3. **Test Onboarding:** Sign up → Go to onboarding → Take a photo
+   - Should successfully analyze and save the image
+
+### Troubleshooting
+
+- **Port 5000 already in use:** Kill the process: `lsof -ti:5000 | xargs kill -9`
+- **CV model not found:** Make sure `cv_model/models/face_landmarker.task` exists (3.6MB file)
+- **Connection refused:** Ensure CV model service is running before starting Next.js
 
 ## Database Schema
 
 The application uses the following Supabase tables:
 
 - **users**: User accounts with profile information
+  - Required columns: `id`, `email`, `password_hash`
+  - Optional columns: `full_name`, `location`, `timezone`, `mobile_number`, `date_of_birth`, `feature_analysis_id`, `profile_picture_url` (text/string)
 - **feature_analysis**: Facial feature analysis results
+  - Required columns: `id` (UUID), `eye_shape`, `nose`, `lips`, `created_at`
+  - Optional columns: `image` (text/string for image URL)
 - **tutorials**: Makeup tutorial videos and metadata
 - **user_tutorial_interactions**: User interactions with tutorials (saves, likes, views)
+
+### Database Setup for Onboarding Feature
+
+To enable the onboarding facial analysis feature, you need to:
+
+1. **Add `profile_picture_url` column to `users` table:**
+   ```sql
+   ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_picture_url TEXT;
+   ```
+
+2. **Add `image` column to `feature_analysis` table (if not already present):**
+   ```sql
+   ALTER TABLE feature_analysis ADD COLUMN IF NOT EXISTS image TEXT;
+   ```
+
+3. **Create Supabase Storage Bucket:**
+   - Go to your Supabase project dashboard
+   - Navigate to Storage
+   - Create a new bucket named `profile-pictures`
+   - Set it to public (or configure appropriate RLS policies)
+   - Configure bucket policies to allow authenticated users to upload files
 
 See the database utility functions in `lib/db/` for available operations.
 

@@ -1,16 +1,22 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './page.module.css'
+import { getSession } from '@/lib/auth-client'
 
 export default function Onboarding() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
   const [cameraActive, setCameraActive] = useState(false)
   const [requestingCamera, setRequestingCamera] = useState(false)
   const [capturedImage, setCapturedImage] = useState(null)
+  const [analysisError, setAnalysisError] = useState(null)
+  const [analysisResult, setAnalysisResult] = useState(null)
   const videoRef = useRef(null)
   const streamRef = useRef(null)
 
@@ -73,7 +79,7 @@ export default function Onboarding() {
     setRequestingCamera(false)
   }
 
-  const capturePhoto = () => {
+  const capturePhoto = async () => {
     if (videoRef.current) {
       const canvas = document.createElement('canvas')
       canvas.width = videoRef.current.videoWidth
@@ -83,6 +89,8 @@ export default function Onboarding() {
       const imageDataUrl = canvas.toDataURL('image/png')
       setCapturedImage(imageDataUrl)
       stopCamera()
+      // Clear any previous errors
+      setAnalysisError(null)
       // Move to analysis step
       setCurrentStep(3)
     }
@@ -213,6 +221,27 @@ export default function Onboarding() {
     }
   }, [cameraActive])
 
+  // Check authentication on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const session = await getSession()
+        if (!session || !session.user) {
+          // User is not authenticated, redirect to login
+          router.push('/login?redirect=/onboarding')
+          return
+        }
+        setIsCheckingAuth(false)
+      } catch (error) {
+        console.error('Error checking authentication:', error)
+        // If session check fails, redirect to login
+        router.push('/login?redirect=/onboarding')
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
   // Cleanup camera on unmount
   useEffect(() => {
     return () => {
@@ -225,19 +254,61 @@ export default function Onboarding() {
     : 0
   const isAnalysisStep = currentStep === 3
 
+  // Handle image analysis when photo is captured
   useEffect(() => {
-    if (isAnalysisStep) {
+    if (isAnalysisStep && capturedImage) {
       setIsLoading(true)
-      const timer = setTimeout(() => {
-        setIsLoading(false)
-        setCurrentStep(4)
-      }, 3000)
+      setAnalysisError(null)
 
-      return () => clearTimeout(timer)
-    } else {
+      const analyzeImage = async () => {
+        try {
+          const response = await fetch('/api/onboarding/analyze', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              imageDataUrl: capturedImage
+            })
+          })
+
+          const data = await response.json()
+
+          if (!response.ok) {
+            throw new Error(data.error || data.details || 'Failed to analyze image')
+          }
+
+          // Save analysis result
+          setAnalysisResult(data.data)
+          setIsLoading(false)
+          // Move to completion step
+          setCurrentStep(4)
+        } catch (error) {
+          console.error('Error analyzing image:', error)
+          setAnalysisError(error.message || 'Failed to analyze image. Please try again.')
+          setIsLoading(false)
+          // Optionally go back to allow retry
+          // setCurrentStep(2)
+        }
+      }
+
+      analyzeImage()
+    } else if (!isAnalysisStep) {
       setIsLoading(false)
     }
-  }, [isAnalysisStep])
+  }, [isAnalysisStep, capturedImage])
+
+  // Show loading state while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <main className={styles.main}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <div className={styles.spinner}></div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className={styles.main}>
@@ -337,6 +408,9 @@ export default function Onboarding() {
         {isAnalysisStep && (
           <div className={styles.loadingContainer}>
             <div className={styles.spinner}></div>
+            {analysisError && (
+              <p style={{ color: 'red', marginTop: '1rem' }}>{analysisError}</p>
+            )}
           </div>
         )}
 
