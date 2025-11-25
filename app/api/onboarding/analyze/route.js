@@ -3,7 +3,7 @@ import { createServerClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
 import { createClient } from '@supabase/supabase-js'
 import { getUserById, updateUser, linkFeatureAnalysisToUser } from '@/lib/db/users'
-import { createFeatureAnalysis } from '@/lib/db/feature-analysis'
+import { createFeatureAnalysis, getFeatureAnalysisById, deleteFeatureAnalysis } from '@/lib/db/feature-analysis'
 import FormData from 'form-data'
 import fetch from 'node-fetch'
 
@@ -47,25 +47,6 @@ export async function POST(request) {
       )
     }
 
-    // Get image from request body (base64 data URL)
-    const body = await request.json()
-    const { imageDataUrl } = body
-
-    if (!imageDataUrl) {
-      return NextResponse.json(
-        { error: 'Image data is required' },
-        { status: 400 }
-      )
-    }
-
-    // Convert base64 data URL to blob
-    const base64Data = imageDataUrl.split(',')[1] // Remove data:image/png;base64, prefix
-    const imageBuffer = Buffer.from(base64Data, 'base64')
-    
-    // Generate unique filename
-    const timestamp = Date.now()
-    const filename = `${authUser.id}/${timestamp}-profile.png`
-    
     // Create service role client for storage operations (bypasses RLS)
     // This uses the service role key which has full access
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -85,6 +66,61 @@ export async function POST(request) {
         persistSession: false
       }
     })
+
+    // Check if user already has an existing feature analysis
+    // If so, delete the old analysis and photo before creating a new one
+    if (user.feature_analysis_id) {
+      try {
+        // Get the old feature analysis to find the old image URL
+        const { data: oldAnalysis, error: oldAnalysisError } = await getFeatureAnalysisById(user.feature_analysis_id)
+        
+        if (!oldAnalysisError && oldAnalysis) {
+          // Extract file path from the old image URL
+          // Supabase storage URLs format: https://{project-ref}.supabase.co/storage/v1/object/public/{bucket}/{path}
+          if (oldAnalysis.image) {
+            try {
+              const imageUrl = oldAnalysis.image
+              // Extract the path after the bucket name
+              const urlParts = imageUrl.split('/storage/v1/object/public/profile-pictures/')
+              if (urlParts.length === 2) {
+                const oldFilePath = urlParts[1]
+                
+                // Delete the old image from storage
+                await serviceSupabase.storage.from('profile-pictures').remove([oldFilePath])
+              }
+            } catch (deleteImageError) {
+              // Log error but don't fail the request - we'll still delete the analysis record
+              console.error('Error deleting old image from storage:', deleteImageError)
+            }
+          }
+          
+          // Delete the old feature analysis record
+          await deleteFeatureAnalysis(user.feature_analysis_id)
+        }
+      } catch (deleteError) {
+        // Log error but don't fail the request - we'll proceed with creating new analysis
+        console.error('Error deleting old feature analysis:', deleteError)
+      }
+    }
+
+    // Get image from request body (base64 data URL)
+    const body = await request.json()
+    const { imageDataUrl } = body
+
+    if (!imageDataUrl) {
+      return NextResponse.json(
+        { error: 'Image data is required' },
+        { status: 400 }
+      )
+    }
+
+    // Convert base64 data URL to blob
+    const base64Data = imageDataUrl.split(',')[1] // Remove data:image/png;base64, prefix
+    const imageBuffer = Buffer.from(base64Data, 'base64')
+    
+    // Generate unique filename
+    const timestamp = Date.now()
+    const filename = `${authUser.id}/${timestamp}-profile.png`
     
     // Upload image to Supabase storage using service role client
     const { data: uploadData, error: uploadError } = await serviceSupabase.storage
