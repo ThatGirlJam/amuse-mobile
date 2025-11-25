@@ -344,7 +344,7 @@ export default function Onboarding() {
         </div>
       </div>
 
-      <div className={`${styles.modalSection} ${currentStep > 0 ? styles.modalTop : ''}`}>
+      <div className={`${styles.modalSection} ${currentStep > 0 ? styles.modalTop : ''} ${currentStep === 5 ? styles.modalStep5 : ''}`}>
         {requestingCamera ? (
           <div className={styles.cameraContainer}>
             <div className={styles.cameraLoading}>
@@ -410,6 +410,92 @@ export default function Onboarding() {
             <div className={styles.spinner}></div>
             {analysisError && (
               <p style={{ color: 'red', marginTop: '1rem' }}>{analysisError}</p>
+            )}
+          </div>
+        )}
+
+        {currentStep === 5 && analysisResult && (
+          <div className={styles.breakdownContainer}>
+            <h3 className={styles.breakdownTitle}>Feature Analysis</h3>
+            <div className={styles.featuresList}>
+              <div className={styles.featureItem}>
+                <span className={styles.featureLabel}>Eye Shape:</span>
+                <span className={styles.featureValue}>
+                  {analysisResult.features?.eye_shape || 'N/A'}
+                  {analysisResult.full_analysis?.eye_analysis?.secondary_features?.length > 0 && (
+                    <span className={styles.secondaryFeature}>
+                      {' '}({analysisResult.full_analysis.eye_analysis.secondary_features.join(', ')})
+                    </span>
+                  )}
+                </span>
+              </div>
+              <div className={styles.featureItem}>
+                <span className={styles.featureLabel}>Nose:</span>
+                <span className={styles.featureValue}>
+                  {analysisResult.features?.nose || 'N/A'}
+                </span>
+              </div>
+              <div className={styles.featureItem}>
+                <span className={styles.featureLabel}>Lips:</span>
+                <span className={styles.featureValue}>
+                  {analysisResult.features?.lips || 'N/A'}
+                </span>
+              </div>
+            </div>
+            
+            {analysisResult.full_analysis?.eye_analysis?.confidence_scores && (
+              <div className={styles.topScoresContainer}>
+                <h4 className={styles.topScoresTitle}>Top Eye Shape Scores</h4>
+                <div className={styles.scoresList}>
+                  {Object.entries(analysisResult.full_analysis.eye_analysis.confidence_scores)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 3)
+                    .map(([shape, score]) => (
+                      <div key={shape} className={styles.scoreItem}>
+                        <span className={styles.scoreLabel}>{shape}:</span>
+                        <span className={styles.scoreValue}>
+                          {(score * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+
+            {analysisResult.full_analysis?.nose_analysis && (
+              <div className={styles.topScoresContainer}>
+                <h4 className={styles.topScoresTitle}>Top Nose Width Scores</h4>
+                <div className={styles.scoresList}>
+                  <div className={styles.scoreItem}>
+                    <span className={styles.scoreLabel}>
+                      {analysisResult.full_analysis.nose_analysis.nose_width || 'N/A'}:
+                    </span>
+                    <span className={styles.scoreValue}>
+                      {analysisResult.full_analysis.nose_analysis.confidence 
+                        ? (analysisResult.full_analysis.nose_analysis.confidence * 100).toFixed(1) + '%'
+                        : 'N/A'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {analysisResult.full_analysis?.lip_analysis && (
+              <div className={styles.topScoresContainer}>
+                <h4 className={styles.topScoresTitle}>Top Lip Fullness Scores</h4>
+                <div className={styles.scoresList}>
+                  <div className={styles.scoreItem}>
+                    <span className={styles.scoreLabel}>
+                      {analysisResult.full_analysis.lip_analysis.lip_fullness || 'N/A'}:
+                    </span>
+                    <span className={styles.scoreValue}>
+                      {analysisResult.full_analysis.lip_analysis.confidence 
+                        ? (analysisResult.full_analysis.lip_analysis.confidence * 100).toFixed(1) + '%'
+                        : 'N/A'}
+                    </span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         )}
