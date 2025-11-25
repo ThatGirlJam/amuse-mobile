@@ -102,6 +102,37 @@
   margin: 0;
 }
 
+.featuresList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.featureItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-primary-bg-light);
+}
+
+.featureItem:last-child {
+  border-bottom: none;
+}
+
+.featureLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.featureValue {
+  font-size: 0.75rem;
+  color: #000000;
+  text-align: right;
+}
+
 .welcomeText {
   font-size: 1.75rem;
   font-weight: 700;
