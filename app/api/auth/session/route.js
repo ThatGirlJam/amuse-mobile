@@ -38,11 +38,19 @@ export async function GET(request) {
     // Get user data from users table
     const { data: userData } = await getUserById(authUser.id)
 
+    // Get display name from user_metadata (Supabase Auth) or fallback to full_name
+    const displayName = authUser.user_metadata?.display_name || 
+                       authUser.user_metadata?.name || 
+                       authUser.user_metadata?.full_name ||
+                       userData?.full_name || 
+                       null
+
     return NextResponse.json({
       user: {
         id: authUser.id,
         email: authUser.email,
         email_verified: authUser.email_confirmed_at !== null,
+        display_name: displayName,
         full_name: userData?.full_name || null,
         mobile_number: userData?.mobile_number || null,
         date_of_birth: userData?.date_of_birth || null,

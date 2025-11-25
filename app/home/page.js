@@ -3,28 +3,34 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getSession } from '@/lib/auth-client'
+import { useRouter } from 'next/navigation'
+import { getSession, signOut } from '@/lib/auth-client'
 import styles from './page.module.css'
 
 export default function Home() {
+  const router = useRouter()
   const [profilePictureUrl, setProfilePictureUrl] = useState(null)
   const [imageError, setImageError] = useState(false)
   const [featureAnalysis, setFeatureAnalysis] = useState(null)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     async function fetchUserProfile() {
       try {
-        const { user } = await getSession()
-        if (user?.profile_picture_url) {
-          setProfilePictureUrl(user.profile_picture_url)
+        const sessionData = await getSession()
+        const userData = sessionData?.user
+        setUser(userData)
+        
+        if (userData?.profile_picture_url) {
+          setProfilePictureUrl(userData.profile_picture_url)
         } else {
           setProfilePictureUrl('/images/onboarding_2.jpg')
         }
 
         // Fetch feature analysis if user exists
-        if (user?.id) {
+        if (userData?.id) {
           try {
-            const response = await fetch(`/api/users/${user.id}/features`, {
+            const response = await fetch(`/api/users/${userData.id}/features`, {
               method: 'GET',
               credentials: 'include',
             })
@@ -65,10 +71,38 @@ export default function Home() {
   // Check if URL is external (starts with http:// or https://)
   const isExternalUrl = profilePictureUrl?.startsWith('http://') || profilePictureUrl?.startsWith('https://')
 
+  const handleLogout = async () => {
+    try {
+      await signOut()
+      router.push('/login')
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
+
+  const getUserDisplayName = () => {
+    // Use display_name from auth user_metadata first, then fallback to full_name
+    if (user?.display_name) {
+      return user.display_name.split(' ')[0] // Get first name
+    }
+    if (user?.full_name) {
+      return user.full_name.split(' ')[0] // Get first name
+    }
+    if (user?.email) {
+      return user.email.split('@')[0] // Get part before @
+    }
+    return 'there'
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.topBar}>
-        <h2 className={styles.greeting}>Hi, Welcome Back</h2>
+        <div className={styles.greetingContainer}>
+          <h2 className={styles.greeting}>Welcome back, {getUserDisplayName()}!</h2>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
         <button className={styles.searchButton}>
           <Image
             src="/images/search.png"
