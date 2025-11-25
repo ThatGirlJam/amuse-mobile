@@ -68,11 +68,20 @@ export async function POST(request) {
       // Process and score results
       const scoredResults = scoreAndProcessResults(responseItems, features, query)
       
-      // Merge results (keep highest score for duplicates)
+      // Merge results (keep highest score for duplicates) and add description
       for (const result of scoredResults) {
         const url = result.url
+        // Find the original YouTube API item to get description
+        const originalItem = responseItems.find(item => 
+          item.id?.videoId === url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1]
+        )
+        const description = originalItem?.snippet?.description || ''
+        
         if (!allResults[url] || result.score > allResults[url].score) {
-          allResults[url] = result
+          allResults[url] = {
+            ...result,
+            description: description.substring(0, 200) // Limit description length
+          }
         }
       }
 
@@ -133,16 +142,20 @@ export async function POST(request) {
       }
     }
 
-    // Format response
-    const formattedResults = storedTutorials.map(tutorial => ({
-      tutorial_id: tutorial.id,
-      title: tutorial.title,
-      url: tutorial.url,
-      channel: tutorial.channel,
-      score: tutorial.score,
-      query: tutorial.query,
-      matched_features: tutorial.matched_features
-    }))
+    // Format response - include description from allResults if available
+    const formattedResults = storedTutorials.map(tutorial => {
+      const resultData = allResults[tutorial.url] || {}
+      return {
+        tutorial_id: tutorial.id,
+        title: tutorial.title,
+        url: tutorial.url,
+        channel: tutorial.channel,
+        score: tutorial.score,
+        query: tutorial.query,
+        matched_features: tutorial.matched_features,
+        description: resultData.description || ''
+      }
+    })
 
     return NextResponse.json({
       cached: anyCached, // Indicates if any results came from cache
