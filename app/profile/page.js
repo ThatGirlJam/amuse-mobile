@@ -52,10 +52,10 @@ export default function Profile() {
             className={styles.navIcon}
           />
         </Link>
-        <Link href="/cart" className={styles.navItem}>
+        <Link href="/community" className={styles.navItem}>
           <Image
             src="/images/cart.png"
-            alt="Cart"
+            alt="Community"
             width={24}
             height={24}
             className={styles.navIcon}

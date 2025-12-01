@@ -52,10 +52,10 @@ export default function Cart() {
             className={styles.navIcon}
           />
         </Link>
-        <Link href="/cart" className={styles.navItem}>
+        <Link href="/community" className={styles.navItem}>
           <Image
-            src="/images/cart_selected.png"
-            alt="Cart"
+            src="/images/cart.png"
+            alt="Community"
             width={24}
             height={24}
             className={styles.navIcon}
