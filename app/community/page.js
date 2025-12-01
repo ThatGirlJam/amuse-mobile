@@ -86,10 +86,10 @@ export default function Community() {
             className={styles.navIcon}
           />
         </Link>
-        <Link href="/categories" className={styles.navItem}>
+        <Link href="/made-for-you" className={styles.navItem}>
           <Image
             src="/images/categories.png"
-            alt="Categories"
+            alt="Made For You"
             width={24}
             height={24}
             className={styles.navIcon}

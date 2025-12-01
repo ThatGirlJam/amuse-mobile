@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { getSession } from '@/lib/auth-client'
 import styles from './page.module.css'
 
-export default function Categories() {
+export default function MadeForYou() {
   const [tutorials, setTutorials] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -324,10 +324,10 @@ export default function Categories() {
             className={styles.navIcon}
           />
         </Link>
-        <Link href="/categories" className={styles.navItem}>
+        <Link href="/made-for-you" className={styles.navItem}>
           <Image
             src="/images/categories_selected.png"
-            alt="Categories"
+            alt="Made For You"
             width={24}
             height={24}
             className={styles.navIcon}
