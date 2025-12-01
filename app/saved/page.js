@@ -31,7 +31,7 @@ export default function Wishlist() {
       try {
         const session = await getSession()
         if (!session || !session.user) {
-          router.push('/login?redirect=/wishlist')
+          router.push('/login?redirect=/saved')
           return
         }
 
@@ -224,10 +224,10 @@ export default function Wishlist() {
             className={styles.navIcon}
           />
         </Link>
-        <Link href="/wishlist" className={styles.navItem}>
+        <Link href="/saved" className={styles.navItem}>
           <Image
             src="/images/wishlist_selected.png"
-            alt="Wishlist"
+            alt="Saved"
             width={24}
             height={24}
             className={styles.navIcon}

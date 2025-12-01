@@ -50,10 +50,10 @@ export default function Comparison() {
             className={styles.navIcon}
           />
         </Link>
-        <Link href="/wishlist" className={styles.navItem}>
+        <Link href="/saved" className={styles.navItem}>
           <Image
             src="/images/wishlist.png"
-            alt="Wishlist"
+            alt="Saved"
             width={24}
             height={24}
             className={styles.navIcon}
