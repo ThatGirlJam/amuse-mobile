@@ -11,6 +11,8 @@ export default function Categories() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [loadingText, setLoadingText] = useState(0)
+  const [user, setUser] = useState(null)
+  const [savedTutorials, setSavedTutorials] = useState(new Set())
 
   const loadingMessages = [
     'Finding the perfect tutorials for you...',
@@ -74,16 +76,17 @@ export default function Categories() {
           return
         }
         
-        const user = sessionData?.user
+        const currentUser = sessionData?.user
+        setUser(currentUser)
         
-        if (!user || !user.id) {
+        if (!currentUser || !currentUser.id) {
           setError('Please log in to see personalized recommendations.')
           setLoading(false)
           return
         }
 
         // Get user's feature analysis
-        const featuresResponse = await fetch(`/api/users/${user.id}/features`, {
+        const featuresResponse = await fetch(`/api/users/${currentUser.id}/features`, {
           method: 'GET',
           credentials: 'include',
         })
@@ -113,7 +116,7 @@ export default function Categories() {
           },
           credentials: 'include',
           body: JSON.stringify({
-            user_id: user.id,
+            user_id: currentUser.id,
             eye_shape: featureData.eye_shape,
             nose: featureData.nose,
             lips: featureData.lips,
@@ -121,6 +124,22 @@ export default function Categories() {
             force_refresh: false
           })
         })
+
+        // Fetch user's saved tutorials to show correct icon state
+        try {
+          const wishlistResponse = await fetch(`/api/users/${currentUser.id}/wishlist`, {
+            method: 'GET',
+            credentials: 'include',
+          })
+          if (wishlistResponse.ok) {
+            const wishlistData = await wishlistResponse.json()
+            const savedIds = new Set((wishlistData.tutorials || []).map(t => t.tutorial_id))
+            setSavedTutorials(savedIds)
+          }
+        } catch (wishlistError) {
+          console.error('Error fetching wishlist:', wishlistError)
+          // Continue even if wishlist fetch fails
+        }
 
         if (!searchResponse.ok) {
           throw new Error('Failed to fetch tutorials')
@@ -169,6 +188,44 @@ export default function Categories() {
 
   const handleTutorialClick = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleWishlistToggle = async (e, tutorialId) => {
+    e.stopPropagation()
+    
+    if (!user?.id || !tutorialId) return
+
+    const isCurrentlySaved = savedTutorials.has(tutorialId)
+    const newSavedState = !isCurrentlySaved
+
+    try {
+      const response = await fetch(`/api/users/${user.id}/tutorials/${tutorialId}/interactions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          is_saved: newSavedState
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update wishlist')
+      }
+
+      // Update local state
+      const newSavedTutorials = new Set(savedTutorials)
+      if (newSavedState) {
+        newSavedTutorials.add(tutorialId)
+      } else {
+        newSavedTutorials.delete(tutorialId)
+      }
+      setSavedTutorials(newSavedTutorials)
+    } catch (err) {
+      console.error('Error updating wishlist:', err)
+      alert('Failed to update wishlist. Please try again.')
+    }
   }
 
   return (
@@ -239,14 +296,11 @@ export default function Categories() {
                     </div>
                     <button
                       className={styles.heartButton}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        // TODO: Implement like functionality
-                      }}
+                      onClick={(e) => handleWishlistToggle(e, tutorial.tutorial_id)}
                     >
                       <Image
-                        src="/images/wishlist.png"
-                        alt="Like"
+                        src={savedTutorials.has(tutorial.tutorial_id) ? "/images/wishlist_selected.png" : "/images/wishlist.png"}
+                        alt={savedTutorials.has(tutorial.tutorial_id) ? "Remove from wishlist" : "Add to wishlist"}
                         width={20}
                         height={20}
                         className={styles.heartIcon}
