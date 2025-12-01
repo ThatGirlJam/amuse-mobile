@@ -1,0 +1,199 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
+  padding-bottom: 0.75rem;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.backButton {
+  font-size: 1.5rem;
+  color: var(--color-text-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.backButton:active {
+  opacity: 0.7;
+}
+
+.pageTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-accent);
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.searchButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.searchButton:active {
+  opacity: 0.7;
+}
+
+.searchIcon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem 1rem;
+  padding-bottom: 2rem;
+  overflow-y: auto;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.card {
+  background-color: var(--color-primary-bg-light);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 160px;
+  justify-content: center;
+}
+
+.card:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.cardIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-accent);
+  margin: 0;
+}
+
+.cardDescription {
+  font-size: 0.75rem;
+  color: var(--color-text-dark);
+  margin: 0;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background-color: #ffffff;
+  border-top: 1px solid var(--color-primary-bg-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.75rem 0;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  z-index: 100;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--color-text-light);
+  transition: opacity 0.2s ease;
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.navItem:active {
+  opacity: 0.7;
+}
+
+.navIcon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem 0.75rem;
+  }
+
+  .cardsGrid {
+    gap: 0.75rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+    min-height: 140px;
+  }
+
+  .cardIcon {
+    font-size: 2rem;
+  }
+
+  .cardTitle {
+    font-size: 0.9rem;
+  }
+
+  .cardDescription {
+    font-size: 0.7rem;
+  }
+}
+
