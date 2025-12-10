@@ -80,12 +80,56 @@ export default function Onboarding() {
   }
 
   const capturePhoto = async () => {
+    console.log('Capture button clicked!', { videoRef: videoRef.current })
     if (videoRef.current) {
+      const video = videoRef.current
+      const videoElement = video
+      
+      // Get the displayed dimensions of the video element
+      const displayedWidth = videoElement.offsetWidth
+      const displayedHeight = videoElement.offsetHeight
+      
+      // Get the video's native dimensions
+      const videoWidth = videoElement.videoWidth
+      const videoHeight = videoElement.videoHeight
+      
+      // Calculate the aspect ratios
+      const videoAspect = videoWidth / videoHeight
+      const displayAspect = displayedWidth / displayedHeight
+      
+      // Since object-fit: cover is used, calculate what portion of the video is visible
+      let sourceX = 0
+      let sourceY = 0
+      let sourceWidth = videoWidth
+      let sourceHeight = videoHeight
+      
+      if (videoAspect > displayAspect) {
+        // Video is wider than display, crop sides
+        sourceWidth = videoHeight * displayAspect
+        sourceX = (videoWidth - sourceWidth) / 2
+      } else {
+        // Video is taller than display, crop top/bottom
+        sourceHeight = videoWidth / displayAspect
+        sourceY = (videoHeight - sourceHeight) / 2
+      }
+      
+      // Create canvas with displayed dimensions
       const canvas = document.createElement('canvas')
-      canvas.width = videoRef.current.videoWidth
-      canvas.height = videoRef.current.videoHeight
+      canvas.width = displayedWidth
+      canvas.height = displayedHeight
       const ctx = canvas.getContext('2d')
-      ctx.drawImage(videoRef.current, 0, 0)
+      
+      // Flip the image horizontally to match the mirrored display (scaleX(-1))
+      ctx.translate(canvas.width, 0)
+      ctx.scale(-1, 1)
+      
+      // Draw the visible portion of the video
+      ctx.drawImage(
+        videoElement,
+        sourceX, sourceY, sourceWidth, sourceHeight, // Source rectangle
+        0, 0, displayedWidth, displayedHeight // Destination rectangle
+      )
+      
       const imageDataUrl = canvas.toDataURL('image/png')
       setCapturedImage(imageDataUrl)
       stopCamera()
@@ -93,6 +137,8 @@ export default function Onboarding() {
       setAnalysisError(null)
       // Move to analysis step
       setCurrentStep(3)
+    } else {
+      console.error('Video ref is not available')
     }
   }
 
@@ -313,7 +359,7 @@ export default function Onboarding() {
   return (
     <main className={styles.main}>
       <div className={styles.topBar}>
-        {currentStep > 0 && (
+        {currentStep > 0 && !cameraActive && (
           <button onClick={prevStep} className={styles.backButton}>
             ←
           </button>
@@ -321,27 +367,77 @@ export default function Onboarding() {
       </div>
       
       <div className={`${styles.content} ${currentStep > 0 ? styles.contentBottom : ''}`}>
-        <div className={styles.logoContainer}>
-          <h1 className={styles.title}>
-            {currentStep === 0 ? initialStep.title : onboardingSteps[currentStep - 1].title}
-          </h1>
-          {currentStep === 0 && (
-            <>
-              <Image
-                src="/images/logo_dark_large_cropped.png"
-                alt="Amuse"
-                width={200}
-                height={50}
-                className={styles.logo}
-                priority
-              />
-              <br />
-            </>
-          )}
-          <p className={styles.description}>
-            {currentStep === 0 ? initialStep.description : onboardingSteps[currentStep - 1].description}
-          </p>
-        </div>
+        {currentStep !== 5 && (
+          <div className={styles.logoContainer}>
+            <h1 className={styles.title}>
+              {currentStep === 0 ? initialStep.title : onboardingSteps[currentStep - 1].title}
+            </h1>
+            {currentStep === 0 && (
+              <>
+                <Image
+                  src="/images/logo_dark_large_cropped.png"
+                  alt="Amuse"
+                  width={200}
+                  height={50}
+                  className={styles.logo}
+                  priority
+                />
+                <br />
+              </>
+            )}
+            <p className={styles.description}>
+              {currentStep === 0 ? initialStep.description : onboardingSteps[currentStep - 1].description}
+            </p>
+          </div>
+        )}
+        
+        {currentStep > 0 && currentStep !== 5 && (
+          <div className={styles.controlsRow}>
+            {!cameraActive && !requestingCamera ? (
+              <div className={styles.indicators}>
+                {[0, 1, 2, 3].map((indicatorIndex) => {
+                  let isActive = false
+                  if (indicatorIndex === 0) {
+                    isActive = currentStep === 1
+                  } else if (indicatorIndex === 1) {
+                    isActive = currentStep === 2
+                  } else if (indicatorIndex === 2) {
+                    isActive = currentStep === 3 || currentStep === 4
+                  } else if (indicatorIndex === 3) {
+                    isActive = currentStep === 5
+                  }
+                  return (
+                    <div
+                      key={indicatorIndex}
+                      className={`${styles.indicator} ${isActive ? styles.active : ''}`}
+                    />
+                  )
+                })}
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <div className={styles.buttonContainer}>
+              {requestingCamera ? (
+                <button className={`${styles.nextButton} ${styles.nextButtonDisabled}`} disabled>
+                  Requesting Access...
+                </button>
+              ) : cameraActive ? (
+                <button onClick={stopCamera} className={styles.cancelButton}>
+                  Cancel
+                </button>
+              ) : isAnalysisStep ? (
+                <button className={`${styles.nextButton} ${styles.nextButtonDisabled}`} disabled>
+                  Analyzing...
+                </button>
+              ) : (
+                <button onClick={nextStep} className={styles.nextButton}>
+                  Next
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={`${styles.modalSection} ${currentStep > 0 ? styles.modalTop : ''} ${currentStep === 5 ? styles.modalStep5 : ''}`}>
@@ -361,8 +457,15 @@ export default function Onboarding() {
               muted
               className={styles.cameraVideo}
             />
-            <button onClick={capturePhoto} className={styles.captureButton}>
-              📷
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                capturePhoto();
+              }} 
+              className={styles.captureButton}
+              type="button"
+            >
             </button>
           </div>
         ) : currentStep === 5 && capturedImage ? (
@@ -382,29 +485,6 @@ export default function Onboarding() {
             className={styles.modalImage}
           />
         )}
-        {currentStep > 0 && !cameraActive && !requestingCamera && !(currentStep === 5 && capturedImage) && (
-          <div className={styles.indicators}>
-            {[0, 1, 2, 3].map((indicatorIndex) => {
-              let isActive = false
-              if (indicatorIndex === 0) {
-                isActive = currentStep === 1
-              } else if (indicatorIndex === 1) {
-                isActive = currentStep === 2
-              } else if (indicatorIndex === 2) {
-                isActive = currentStep === 3 || currentStep === 4
-              } else if (indicatorIndex === 3) {
-                isActive = currentStep === 5
-              }
-              return (
-                <div
-                  key={indicatorIndex}
-                  className={`${styles.indicator} ${isActive ? styles.active : ''}`}
-                />
-              )
-            })}
-          </div>
-        )}
-
         {isAnalysisStep && (
           <div className={styles.loadingContainer}>
             <div className={styles.spinner}></div>
@@ -500,33 +580,24 @@ export default function Onboarding() {
           </div>
         )}
 
-        <div className={styles.buttonContainer}>
-          {currentStep === 0 ? (
-            <button onClick={nextStep} className={styles.nextButton}>
+        {currentStep === 5 && (
+          <div className={styles.controlsRow}>
+            <div></div>
+            <div className={styles.buttonContainer}>
+              <Link href="/home" className={styles.nextButton}>
+                Finish
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 0 && (
+          <div className={styles.buttonContainer}>
+            <button onClick={nextStep} className={styles.getStartedButton}>
               Get Started
             </button>
-          ) : requestingCamera ? (
-            <button className={`${styles.nextButton} ${styles.nextButtonDisabled}`} disabled>
-              Requesting Access...
-            </button>
-          ) : cameraActive ? (
-            <button onClick={stopCamera} className={styles.cancelButton}>
-              Cancel
-            </button>
-          ) : isAnalysisStep ? (
-            <button className={`${styles.nextButton} ${styles.nextButtonDisabled}`} disabled>
-              Analyzing...
-            </button>
-          ) : currentStep < onboardingSteps.length ? (
-            <button onClick={nextStep} className={styles.nextButton}>
-              Next
-            </button>
-          ) : (
-            <Link href="/home" className={styles.nextButton}>
-              Finish
-            </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </main>
   )

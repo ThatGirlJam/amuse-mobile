@@ -2,12 +2,22 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  max-height: 932px;
+  height: 100vh;
   background-color: #ffffff;
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
   position: relative;
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+
+@media (min-height: 933px) {
+  .main {
+    height: 932px;
+    min-height: 932px;
+  }
 }
 
 .topBar {
@@ -16,10 +26,10 @@
   align-items: center;
   padding: 1rem;
   padding-top: calc(1rem + env(safe-area-inset-top));
-  padding-bottom: 0.75rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   background-color: #ffffff;
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -85,7 +95,6 @@
 .content {
   flex: 1;
   padding: 1rem;
-  padding-bottom: 2rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -106,6 +115,9 @@
 }
 
 .image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
   border-radius: 80px;
 }
 
@@ -229,6 +241,7 @@
 .recommendationImage {
   width: 80px;
   height: 80px;
+  max-width: 100%;
   background-color: var(--color-secondary-bg-light);
   border-radius: 12px;
   flex-shrink: 0;
@@ -261,7 +274,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   background-color: #ffffff;
   border-top: 1px solid var(--color-primary-bg-light);
   display: flex;

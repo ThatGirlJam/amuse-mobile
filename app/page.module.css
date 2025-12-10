@@ -4,13 +4,23 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  max-height: 932px;
+  height: 100vh;
   padding: 2rem;
   text-align: center;
   background-color: #ffffff;
   color: var(--color-text-dark);
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
+  overflow-x: hidden;
+}
+
+@media (min-height: 933px) {
+  .main {
+    height: 932px;
+    min-height: 932px;
+  }
 }
 
 .header {
@@ -19,7 +29,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
 }
 
 .header .logo {
@@ -28,6 +38,7 @@
   max-width: 300px;
   height: auto;
   object-fit: contain;
+  display: block;
 }
 
 @media (max-width: 768px) {

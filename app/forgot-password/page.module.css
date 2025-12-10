@@ -4,14 +4,23 @@
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
+  max-height: 932px;
+  height: 100vh;
   padding: 0;
   background-color: #ffffff;
   color: var(--color-text-dark);
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
+}
+
+@media (min-height: 933px) {
+  .main {
+    height: 932px;
+    min-height: 932px;
+  }
 }
 
 .topBar {
@@ -53,7 +62,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   margin: 1rem auto;
   padding: 0 1rem;
   padding-bottom: calc(65vh + 150px);
@@ -68,7 +77,8 @@
 }
 
 .modalSection {
-  width: 100vw;
+  width: 100%;
+  max-width: 430px;
   background-color: var(--color-primary-bg-light);
   border-radius: 20px 20px 0 0;
   padding: 2rem 1.5rem;
@@ -77,8 +87,9 @@
   position: fixed;
   top: 35%;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
 }
 
 .modalTitle {

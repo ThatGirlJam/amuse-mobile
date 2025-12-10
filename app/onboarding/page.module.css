@@ -4,14 +4,23 @@
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
+  max-height: 932px;
+  height: 100vh;
   padding: 0;
   background-color: #ffffff;
   color: var(--color-text-dark);
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
+}
+
+@media (min-height: 933px) {
+  .main {
+    height: 932px;
+    min-height: 932px;
+  }
 }
 
 .topBar {
@@ -22,7 +31,7 @@
   padding: 0.75rem 1rem;
   gap: 0.5rem;
   position: relative;
-  z-index: 10;
+  z-index: 30;
 }
 
 .backButton {
@@ -54,29 +63,47 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  max-width: 480px;
-  margin: 0.5rem auto 0 auto;
+  max-width: 430px;
+  margin: 0;
   padding: 0 1rem;
+  padding-top: calc(60px + env(safe-area-inset-top));
   padding-bottom: calc(30vh + 150px);
   flex: 1;
   gap: 0.5rem;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  min-height: 100%;
+  z-index: 0;
 }
 
 .contentBottom {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   right: auto;
   margin: 0 auto;
   padding: 0.5rem 1rem;
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
-  max-width: 480px;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  max-width: 430px;
   width: 100%;
   justify-content: flex-end;
   padding-top: 0;
-  z-index: 2;
-  background-color: #ffffff;
+  z-index: 4;
+  background-color: transparent;
+}
+
+.contentBottom:has(.controlsRow) {
+  position: fixed;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.contentBottom:has(.controlsRow) .controlsRow {
+  pointer-events: auto;
 }
 
 .logoContainer {
@@ -94,6 +121,7 @@
   max-width: 300px;
   height: auto;
   object-fit: contain;
+  display: block;
 }
 
 .stepContent {
@@ -122,11 +150,26 @@
   padding: 0.5rem 1rem;
 }
 
+.controlsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
 .indicators {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 .indicator {
@@ -145,14 +188,17 @@
 
 .initialButtonContainer {
   width: 100%;
+  max-width: 430px;
   display: flex;
   justify-content: center;
   padding: 2rem 1.5rem;
   padding-bottom: calc(2rem + env(safe-area-inset-bottom));
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  z-index: 2;
 }
 
 .getStartedButton {
@@ -166,15 +212,18 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
-  background-color: var(--color-secondary-bg-light);
+  background-color: var(--color-secondary-bg-dark);
   color: var(--color-text-dark);
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .getStartedButton:hover {
-  background-color: var(--color-secondary-bg-dark);
+  background-color: var(--color-secondary-bg-light);
   transform: translateY(-1px);
 }
 
@@ -183,82 +232,101 @@
 }
 
 .modalSection {
-  width: 100vw;
+  width: 100%;
+  max-width: 430px;
   background-color: var(--color-primary-bg-light);
   border-radius: 20px 20px 0 0;
-  padding: 2rem 1.5rem;
+  padding: calc(2rem + 1rem) 1.5rem 2rem 1.5rem;
   padding-bottom: calc(2rem + env(safe-area-inset-bottom));
   margin: 0;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  z-index: 20;
+  pointer-events: auto;
 }
 
 .modalTop {
   top: 0;
   bottom: auto;
   border-radius: 0 0 20px 20px;
-  padding-top: calc(2rem + env(safe-area-inset-top));
-  z-index: 1;
+  padding-top: calc(2rem + 1rem + env(safe-area-inset-top));
+  z-index: 20;
 }
 
 .modalStep5 .buttonContainer {
   flex-shrink: 0;
   padding-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.modalSection .buttonContainer {
+  justify-content: center;
+  width: 100%;
+  flex: 0;
 }
 
 .modalImage {
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: auto;
-  max-height: 50vh;
+  max-height: 70vh;
   object-fit: contain;
-  margin: -2rem -1.5rem 0 -1.5rem;
-  border-radius: 20px 20px 0 0;
+  margin: calc(-2rem - 1rem) -1.5rem 0 -1.5rem;
+  padding-top: 1rem;
+  border-radius: 30px 30px 20px 20px;
 }
 
 .modalTop .modalImage {
-  border-radius: 0 0 20px 20px;
-  margin: calc(-2rem - env(safe-area-inset-top)) -1.5rem 0 -1.5rem;
+  border-radius: 30px 30px 20px 20px;
+  margin: calc(-2rem - 1rem - env(safe-area-inset-top)) -1.5rem 0 -1.5rem;
+  padding-top: 1rem;
 }
 
 .capturedImageContainer {
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: auto;
-  max-height: 50vh;
-  margin: -2rem -1.5rem 0 -1.5rem;
-  border-radius: 20px 20px 0 0;
+  max-height: 70vh;
+  margin: calc(-2rem - 1rem) -1.5rem 0 -1.5rem;
+  padding-top: 0;
+  border-radius: 30px 30px 20px 20px;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background-color: #000;
 }
 
 .modalTop .capturedImageContainer {
-  border-radius: 0 0 20px 20px;
-  margin: calc(-2rem - env(safe-area-inset-top)) -1.5rem 0 -1.5rem;
+  border-radius: 30px 30px 20px 20px;
+  margin: calc(-2rem - 1rem - env(safe-area-inset-top)) -1.5rem 0 -1.5rem;
+  padding-top: 0;
 }
 
 .capturedImage {
   width: 100%;
+  max-width: 100%;
   height: auto;
-  max-height: 50vh;
+  max-height: 70vh;
   object-fit: contain;
   display: block;
 }
 
 .buttonContainer {
-  width: 100%;
   display: flex;
-  justify-content: center;
-  margin-top: 0;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .nextButton {
@@ -272,15 +340,18 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
-  background-color: var(--color-secondary-bg-light);
+  background-color: var(--color-secondary-bg-dark);
   color: var(--color-text-dark);
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .nextButton:hover {
-  background-color: var(--color-secondary-bg-dark);
+  background-color: var(--color-secondary-bg-light);
   transform: translateY(-1px);
 }
 
@@ -322,22 +393,24 @@
 
 .cameraContainer {
   position: relative;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: 50vh;
   min-height: 300px;
   margin: -2rem -1.5rem 0 -1.5rem;
-  border-radius: 20px 20px 0 0;
+  border-radius: 20px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #000;
   z-index: 1;
+  pointer-events: auto;
+  isolation: isolate;
 }
 
 .modalTop .cameraContainer {
-  border-radius: 0 0 20px 20px;
+  border-radius: 20px;
   margin: calc(-2rem - env(safe-area-inset-top)) -1.5rem 0 -1.5rem;
 }
 
@@ -353,6 +426,8 @@
   top: 0;
   left: 0;
   background-color: #000;
+  pointer-events: none;
+  border-radius: 20px;
 }
 
 .cameraLoading {
@@ -365,6 +440,7 @@
   min-height: 300px;
   color: #ffffff;
   gap: 1.5rem;
+  border-radius: 20px;
 }
 
 .cameraLoading p {
@@ -375,8 +451,8 @@
 }
 
 .captureButton {
-  position: absolute;
-  bottom: 2rem;
+  position: fixed;
+  bottom: calc(2rem + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
   width: 70px;
@@ -390,16 +466,19 @@
   justify-content: center;
   font-size: 2rem;
   transition: all 0.2s ease;
-  z-index: 10;
+  z-index: 1000;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .captureButton:hover {
-  background-color: rgba(255, 255, 255, 0.5);
-  transform: translateX(-50%) scale(1.1);
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: translateX(-50%) scale(1.05);
 }
 
 .captureButton:active {
-  transform: translateX(-50%) scale(0.95);
+  transform: translateX(-50%) scale(0.98);
 }
 
 .cancelButton {
@@ -418,6 +497,9 @@
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .cancelButton:hover {
@@ -438,15 +520,21 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  max-height: calc(50vh - 200px);
-  overflow-y: auto;
+  height: 250px;
+  max-height: 250px;
+  overflow-y: scroll;
   overflow-x: hidden;
-  flex-shrink: 1;
-  min-height: 0;
+  flex-shrink: 0;
+  z-index: 1;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modalStep5 {
   gap: 1rem;
+  padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+  height: auto;
+  max-height: none;
 }
 
 .breakdownContainer::-webkit-scrollbar {
@@ -567,10 +655,16 @@
   }
   
   .content {
-    margin: 0.25rem auto 0 auto;
+    margin: 0;
     padding: 0 0.5rem;
+    padding-top: calc(50px + env(safe-area-inset-top));
     padding-bottom: calc(30vh + 150px);
     gap: 1.5rem;
+  }
+  
+  .controlsRow {
+    padding: 0 0.5rem;
+    margin-top: 1rem;
   }
 
   .initialButtonContainer {
@@ -605,7 +699,8 @@
   }
 
   .breakdownContainer {
-    max-height: calc(45vh - 160px);
+    height: 200px;
+    max-height: 200px;
     padding: 1rem;
   }
 }
