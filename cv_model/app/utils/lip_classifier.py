@@ -52,12 +52,12 @@ class LipClassifier:
         'lower_outer_lip': [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291],
     }
 
-    # Classification thresholds (RECALIBRATED after fixing landmark 0 bug)
-    # Since we're now measuring actual lip thickness (not nose-to-lip), values will be smaller
+    # Classification thresholds (FURTHER RECALIBRATED - narrow lips need lower thresholds)
+    # After testing, narrow lips were still showing as full, so lowering further
     THRESHOLDS = {
-        'thin_max': 0.10,      # Height-to-width ratio < 0.10 = thin (lowered from 0.15)
-        'medium_min': 0.10,    # 0.10 <= ratio <= 0.18 = medium
-        'medium_max': 0.18,    # ratio > 0.18 = full (lowered from 0.25)
+        'thin_max': 0.08,      # Height-to-width ratio < 0.08 = thin (lowered from 0.10)
+        'medium_min': 0.08,    # 0.08 <= ratio <= 0.14 = medium
+        'medium_max': 0.14,    # ratio > 0.14 = full (lowered from 0.18)
     }
 
     def __init__(self):
@@ -147,18 +147,12 @@ class LipClassifier:
         Returns:
             Float representing upper lip thickness
         """
-        # Get top and bottom center points of upper lip
-        upper_top = np.array([
-            landmarks[self.LIP_LANDMARKS['upper_lip_top_center']]['x'],
-            landmarks[self.LIP_LANDMARKS['upper_lip_top_center']]['y']
-        ])
-        upper_bottom = np.array([
-            landmarks[self.LIP_LANDMARKS['upper_lip_bottom_center']]['x'],
-            landmarks[self.LIP_LANDMARKS['upper_lip_bottom_center']]['y']
-        ])
+        # FIXED: Use ONLY y-coordinate difference (vertical), not 2D distance
+        upper_top_y = landmarks[self.LIP_LANDMARKS['upper_lip_top_center']]['y']
+        upper_bottom_y = landmarks[self.LIP_LANDMARKS['upper_lip_bottom_center']]['y']
 
-        # Calculate vertical distance
-        upper_lip_thickness = np.linalg.norm(upper_top - upper_bottom)
+        # Calculate vertical distance only
+        upper_lip_thickness = abs(upper_top_y - upper_bottom_y)
 
         return upper_lip_thickness
 
@@ -172,18 +166,12 @@ class LipClassifier:
         Returns:
             Float representing lower lip thickness
         """
-        # Get top and bottom center points of lower lip
-        lower_top = np.array([
-            landmarks[self.LIP_LANDMARKS['lower_lip_top_center']]['x'],
-            landmarks[self.LIP_LANDMARKS['lower_lip_top_center']]['y']
-        ])
-        lower_bottom = np.array([
-            landmarks[self.LIP_LANDMARKS['lower_lip_bottom_center']]['x'],
-            landmarks[self.LIP_LANDMARKS['lower_lip_bottom_center']]['y']
-        ])
+        # FIXED: Use ONLY y-coordinate difference (vertical), not 2D distance
+        lower_top_y = landmarks[self.LIP_LANDMARKS['lower_lip_top_center']]['y']
+        lower_bottom_y = landmarks[self.LIP_LANDMARKS['lower_lip_bottom_center']]['y']
 
-        # Calculate vertical distance
-        lower_lip_thickness = np.linalg.norm(lower_top - lower_bottom)
+        # Calculate vertical distance only
+        lower_lip_thickness = abs(lower_top_y - lower_bottom_y)
 
         return lower_lip_thickness
 

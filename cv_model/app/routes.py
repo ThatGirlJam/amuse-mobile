@@ -96,14 +96,22 @@ def analyze_face():
         # Read image file
         image_bytes = file.read()
 
-        # Analyze face
-        result = analyzer.analyze_image(image_bytes)
+        # Check if results should be saved to database
+        save_to_db = request.form.get('save', 'true').lower() == 'true'
+
+        # Generate analysis ID for tracking
+        import uuid
+        analysis_id = str(uuid.uuid4())
+
+        # Analyze face with bounding box upload enabled
+        result = analyzer.analyze_image(
+            image_bytes,
+            upload_annotated=True,  # Enable Supabase upload for bounding boxes
+            analysis_id=analysis_id
+        )
 
         if result.get("error"):
             return jsonify(result), 400
-
-        # Check if results should be saved to database
-        save_to_db = request.form.get('save', 'true').lower() == 'true'
 
         saved_id = None
         if save_to_db:
@@ -114,12 +122,18 @@ def analyze_face():
                 # Log error but don't fail the request
                 print(f"Warning: Failed to save to database: {str(e)}")
 
+        # Clean up binary data from response (too large for JSON)
+        if 'annotated_image_bytes' in result:
+            del result['annotated_image_bytes']
+
         return (
             jsonify(
                 {
                     "success": True,
                     "timestamp": datetime.utcnow().isoformat(),
                     "saved_id": saved_id,
+                    "analysis_id": analysis_id,
+                    "annotated_image_url": result.get("annotated_image_url"),  # URL for bounding box image
                     "data": result,
                 }
             ),
