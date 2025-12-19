@@ -19,6 +19,10 @@ from app.utils.eye_classifier import EyeClassifier
 from app.utils.nose_classifier import NoseClassifier
 from app.utils.lip_classifier import LipClassifier
 from app.utils.summary_formatter import SummaryFormatter
+from app.utils.quality_validator import QualityValidator
+from app.utils.bounding_box_calculator import BoundingBoxCalculator
+from app.utils.image_annotator import ImageAnnotator
+from app.utils.storage_client import StorageClient
 
 
 class FaceAnalyzer:
@@ -52,6 +56,12 @@ class FaceAnalyzer:
         # Initialize summary formatter
         self.summary_formatter = SummaryFormatter()
 
+        # Initialize NEW components
+        self.quality_validator = QualityValidator()
+        self.bbox_calculator = BoundingBoxCalculator(padding_percent=0.15)
+        self.image_annotator = ImageAnnotator()
+        self.storage_client = StorageClient()
+
     def _initialize_landmarker(self):
         """
         Initialize MediaPipe Face Landmarker with configuration
@@ -76,18 +86,21 @@ class FaceAnalyzer:
         except Exception as e:
             raise RuntimeError(f"Failed to initialize Face Landmarker: {str(e)}")
 
-    def analyze_image(self, image_bytes):
+    def analyze_image(self, image_bytes, upload_annotated: bool = False, analysis_id: str = None):
         """
         Analyze facial features from image bytes
 
         Args:
             image_bytes: Raw image data as bytes
+            upload_annotated: If True, upload annotated image to Supabase Storage
+            analysis_id: Optional analysis ID for associating uploaded image
 
         Returns:
             Dictionary containing:
                 - face_detected: Boolean
                 - num_faces: Number of faces detected
                 - landmarks: List of landmark coordinates (if face detected)
+                - annotated_image_url: URL of uploaded annotated image (if upload_annotated=True)
                 - error: Error message (if any)
         """
         try:
@@ -136,6 +149,16 @@ class FaceAnalyzer:
                     {"x": landmark.x, "y": landmark.y, "z": landmark.z}
                 )
 
+            image_width = image.shape[1]
+            image_height = image.shape[0]
+
+            # NEW: Quality validation
+            quality_result = self.quality_validator.validate_all(
+                landmarks_list,
+                image_width,
+                image_height
+            )
+
             # Classify eye shape (Stage 2)
             eye_classification = self.eye_classifier.classify_eyes(landmarks_list)
 
@@ -145,6 +168,14 @@ class FaceAnalyzer:
             # Classify lip fullness (Stage 4)
             lip_classification = self.lip_classifier.classify_lips(landmarks_list)
 
+            # NEW: Calculate bounding boxes
+            bounding_boxes = self.bbox_calculator.calculate_all_boxes(
+                landmarks_list,
+                image_width,
+                image_height,
+                normalize=True
+            )
+
             # Create unified summary (Stage 5)
             summary = self.summary_formatter.create_summary(
                 eye_classification,
@@ -152,17 +183,60 @@ class FaceAnalyzer:
                 lip_classification
             )
 
-            return {
+            # NEW: Create annotated image
+            annotated_image_bytes = None
+            annotated_image_url = None
+
+            try:
+                # Create classification dict for labels
+                classifications = {
+                    'eye_shape': eye_classification.get('eye_shape', ''),
+                    'nose_width': nose_classification.get('nose_width', ''),
+                    'lip_fullness': lip_classification.get('lip_fullness', ''),
+                }
+
+                annotated_image_bytes = self.image_annotator.annotate_image(
+                    image_bytes,
+                    bounding_boxes,
+                    classifications,
+                    show_labels=True,
+                    show_confidence=True
+                )
+
+                # Upload to Supabase if requested
+                if upload_annotated and annotated_image_bytes:
+                    upload_result = self.storage_client.upload_annotated_image(
+                        annotated_image_bytes,
+                        analysis_id=analysis_id,
+                        file_extension="png"
+                    )
+                    if upload_result and upload_result.get('success'):
+                        annotated_image_url = upload_result.get('public_url')
+                        print(f"Annotated image uploaded: {annotated_image_url}")
+
+            except Exception as e:
+                print(f"Warning: Failed to create/upload annotated image: {e}")
+
+            result = {
                 "face_detected": True,
                 "num_faces": 1,
                 "num_landmarks": len(landmarks_list),
                 "landmarks": landmarks_list,
-                "image_dimensions": {"width": image.shape[1], "height": image.shape[0]},
+                "image_dimensions": {"width": image_width, "height": image_height},
+                "quality_check": quality_result,
+                "bounding_boxes": bounding_boxes,
                 "eye_analysis": eye_classification,
                 "nose_analysis": nose_classification,
                 "lip_analysis": lip_classification,
-                "summary": summary
+                "summary": summary,
+                "annotated_image_bytes": annotated_image_bytes  # For internal use
             }
+
+            # Add annotated image URL if it was uploaded
+            if annotated_image_url:
+                result["annotated_image_url"] = annotated_image_url
+
+            return result
 
         except Exception as e:
             return {

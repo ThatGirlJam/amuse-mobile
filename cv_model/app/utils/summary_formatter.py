@@ -46,7 +46,7 @@ class SummaryFormatter:
             features['eye_secondary'] = eye_analysis['secondary_features']
 
         # Add lip balance
-        features['lip_balance'] = lip_analysis['lip_balance']
+        features['lip_balance'] = lip_analysis.get('details', {}).get('lip_balance', 'balanced')
 
         # Calculate overall confidence
         confidences = [
